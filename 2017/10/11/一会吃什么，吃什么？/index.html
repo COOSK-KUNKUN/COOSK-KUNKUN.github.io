@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      一会吃什么，吃什么？ | COOSK琨琨 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="COOSK-KUNKUN">
+    
+    
+
+    <meta name="description" content="最近有点吃饭困难选择症，所以用WXPYTHON做了一个小程序。原理为随机抽取列表里的数组，然后通过 MessageDialog 显示出来。但我做了点修改，就是每单随机抽取列表里的数组5次后，即停止抽取。防止我选不到好的再选下去2333. 说明我用的 python 版本是 2.7 下载 入门教程python 教程 wxpython 教程 SO WHAT WE EAT NOW? 代码如下123456">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一会吃什么，吃什么？ | COOSK琨琨">
+<meta property="og:url" content="http://yoursite.com/2017/10/11/一会吃什么，吃什么？/index.html">
+<meta property="og:site_name" content="COOSK琨琨">
+<meta property="og:description" content="最近有点吃饭困难选择症，所以用WXPYTHON做了一个小程序。原理为随机抽取列表里的数组，然后通过 MessageDialog 显示出来。但我做了点修改，就是每单随机抽取列表里的数组5次后，即停止抽取。防止我选不到好的再选下去2333. 说明我用的 python 版本是 2.7 下载 入门教程python 教程 wxpython 教程 SO WHAT WE EAT NOW? 代码如下123456">
+<meta property="og:image" content="http://yoursite.com/2017/10/11/一会吃什么，吃什么？/1.png">
+<meta property="og:image" content="http://yoursite.com/2017/10/11/一会吃什么，吃什么？/2.png">
+<meta property="og:image" content="http://yoursite.com/2017/10/11/一会吃什么，吃什么？/3.png">
+<meta property="og:updated_time" content="2017-10-17T08:00:00.311Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一会吃什么，吃什么？ | COOSK琨琨">
+<meta name="twitter:description" content="最近有点吃饭困难选择症，所以用WXPYTHON做了一个小程序。原理为随机抽取列表里的数组，然后通过 MessageDialog 显示出来。但我做了点修改，就是每单随机抽取列表里的数组5次后，即停止抽取。防止我选不到好的再选下去2333. 说明我用的 python 版本是 2.7 下载 入门教程python 教程 wxpython 教程 SO WHAT WE EAT NOW? 代码如下123456">
+<meta name="twitter:image" content="http://yoursite.com/2017/10/11/一会吃什么，吃什么？/1.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">COOSK琨琨</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          Cost the cold eyes on life,on dead.Houseman pass by!
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">博客</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+<nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+    
+      <!-- Github -->
+      <li class="navigation__item">
+        <a href="https://github.com/COOSK-KUNKUN" title="Huno on GitHub">
+          <i class='icon icon-social-github'></i>
+          <span class="label">GitHub</span>
+        </a>
+      </li>
+    
+
+    <!-- China social icon -->
+    <!--
+    
+      <li class="navigation__item">
+        <a href="" title="">
+          <i class='icon cs-icon-douban'></i>
+          <span class="label">Douban</span>
+        </a>
+      </li>
+
+      <li class="navigation__item">
+        <a href="" title="">
+          <i class='icon cs-icon-weibo'></i>
+          <span class="label">Weibo</span>
+        </a>
+      </li>
+
+    -->
+
+
+
+  </ul>
+</nav>
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">一会吃什么，吃什么？</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2017-10-11" class="post-meta__date date">2017-10-11</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <link rel="stylesheet" type="text/css" href="/assets/css/DPlayer.min.css"><script src="/assets/js/DPlayer.min.js"> </script><p>最近有点吃饭困难选择症，所以用WXPYTHON做了一个小程序。<br>原理为随机抽取列表里的数组，然后通过 MessageDialog 显示出来。<br>但我做了点修改，就是每单随机抽取列表里的数组5次后，即停止抽取。<br>防止我选不到好的再选下去2333.</p>
+<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>我用的 python 版本是 2.7 <a href="https://www.python.org/downloads/release/python-2712/" target="_blank" rel="external">下载</a></p>
+<h3 id="入门教程"><a href="#入门教程" class="headerlink" title="入门教程"></a>入门教程</h3><p>python <a href="https://www.w3cschool.cn/python/" target="_blank" rel="external">教程</a></p>
+<p>wxpython <a href="http://www.yiibai.com/wxpython/wxpython_menus.html" target="_blank" rel="external">教程</a></p>
+<h3 id="SO-WHAT-WE-EAT-NOW-代码如下"><a href="#SO-WHAT-WE-EAT-NOW-代码如下" class="headerlink" title="SO WHAT WE EAT NOW? 代码如下"></a>SO WHAT WE EAT NOW? 代码如下</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: UTF-8 -*-</span></div><div class="line"></div><div class="line">import wx</div><div class="line">import random</div><div class="line"></div><div class="line">class mycoosk(wx.Frame):</div><div class="line">    <span class="string">""</span><span class="string">"docstring for mycoosk"</span><span class="string">""</span></div><div class="line">    def __init__(self, parent,title):</div><div class="line">        super(mycoosk, self).__init__(parent, title = title, size = (250,150) )</div><div class="line">        panel = wx.Panel(self)</div><div class="line">        box = wx.BoxSizer(wx.VERTICAL)</div><div class="line">        box1 = wx.BoxSizer(wx.VERTICAL)</div><div class="line"> </div><div class="line">        label = wx.StaticText(panel , -1 , style = wx.ALIGN_CENTER)    </div><div class="line">        </div><div class="line">        txt = <span class="string">"一会吃什么，吃什么？"</span></div><div class="line">       </div><div class="line">        font = wx.Font(18, wx.SCRIPT, wx.NORMAL, wx.NORMAL) </div><div class="line">        label.SetFont(font) </div><div class="line">        label.SetLabel(txt) </div><div class="line"></div><div class="line">        box1.Add(label, -1, wx.ALIGN_CENTER)</div><div class="line"></div><div class="line">        self.CreateStatusBar()</div><div class="line"></div><div class="line">        <span class="comment">##########################################################################</span></div><div class="line"></div><div class="line">        self.button = wx.Button(panel, -1, label = <span class="string">"开始！"</span>, pos = (72,50))</div><div class="line">        box1.Add(self.button, 0, wx.ALIGN_CENTER)</div><div class="line">        self.Bind(wx.EVT_BUTTON,self.OnClicked)</div><div class="line">        </div><div class="line">        self.count = 0</div><div class="line">        <span class="comment"># 计数</span></div><div class="line"></div><div class="line">        font = self.GetFont() </div><div class="line">        <span class="comment">#显示字体</span></div><div class="line">        panel.SetSizer(box) </div><div class="line">        <span class="comment"># box 自动对齐</span></div><div class="line">        self.Centre()</div><div class="line">        </div><div class="line"></div><div class="line">    def OnClicked(self,event):</div><div class="line">        <span class="keyword">if</span> self.count &lt;= 3:</div><div class="line">            dlg1 = wx.MessageDialog(self,random.choice ( [<span class="string">'炒面'</span>, <span class="string">'炒饭'</span>, <span class="string">'四川担担面'</span>, <span class="string">'饺子'</span>, <span class="string">'水煮肉片'</span>, <span class="string">'小酥肉'</span>, <span class="string">'西红柿炒鸡蛋盖浇饭'</span>, <span class="string">'爆葱鸡蛋盖浇饭'</span>, <span class="string">'热干面'</span>, <span class="string">'京酱面'</span>, <span class="string">'猪扒饭'</span>, <span class="string">'鸡扒饭'</span>, <span class="string">'宫保鸡丁盖浇饭'</span>, <span class="string">'鱼香肉丝盖浇饭'</span>, <span class="string">'红烧茄子盖浇饭'</span>, <span class="string">'菲菜鸡蛋盖浇饭'</span>, <span class="string">'糖醋里脊盖浇饭'</span>, <span class="string">'牛肉拉面'</span>, <span class="string">'麻辣烫'</span>,<span class="string">'烩面'</span>,<span class="string">'月亮馍'</span>,<span class="string">'鸡丁面'</span>,<span class="string">'刀削面'</span>,<span class="string">'沙县小吃'</span>,<span class="string">'学府卤肉饭'</span>,<span class="string">'学府餐厅走一走'</span>,<span class="string">'披萨'</span>] ))   </div><div class="line">            <span class="comment"># 弹出消息框。 </span></div><div class="line">            <span class="comment"># 你也可以对该内容进行修改</span></div><div class="line"></div><div class="line">            <span class="keyword">if</span> dlg1.ShowModal() == wx.ID_OK: </div><div class="line">                <span class="built_in">print</span>  <span class="string">'yes'</span></div><div class="line">            pass</div><div class="line">        </div><div class="line">        self.count = self.count + 1</div><div class="line"></div><div class="line">        <span class="keyword">if</span> self.count &gt;= 5:</div><div class="line">            dlg2 = wx.MessageDialog(self, <span class="string">"已经随机菜单了5次了，如果还选不出要吃什么，那就饿着吧"</span>)</div><div class="line">            <span class="keyword">if</span> dlg2.ShowModal() == wx.ID_OK: </div><div class="line">                <span class="built_in">print</span>  <span class="string">'no'</span></div><div class="line">            <span class="built_in">return</span>;</div><div class="line">            pass</div><div class="line"></div><div class="line">        pass</div><div class="line">       </div><div class="line"></div><div class="line">app = wx.App()</div><div class="line"></div><div class="line">frame = mycoosk(None, <span class="string">'COOSK'</span>)</div><div class="line"></div><div class="line">frame.Show()</div><div class="line"></div><div class="line">app.MainLoop()</div></pre></td></tr></table></figure>
+<h3 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h3><p><img src="/2017/10/11/一会吃什么，吃什么？/1.png" alt=""></p>
+<p><img src="/2017/10/11/一会吃什么，吃什么？/2.png" alt=""></p>
+<p><img src="/2017/10/11/一会吃什么，吃什么？/3.png" alt=""></p>
+<h3 id="程序下载"><a href="#程序下载" class="headerlink" title="程序下载"></a>程序下载</h3><p>SO WHAT WE EAT NOW? <a href="https://github.com/COOSK-KUNKUN/so-what-we-eat-now" target="_blank" rel="external">下载</a></p>
+
+  </section>
+
+  <section class="post-comments">
+
+    
+        <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://coosk-kunkun.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                            
+    
+    
+</section>
+
+
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>
