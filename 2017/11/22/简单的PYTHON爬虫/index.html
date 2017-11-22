@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      简单的PYTHON爬虫 | COOSK琨琨 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="COOSK-KUNKUN">
+    
+    
+
+    <meta name="description" content="学了一些爬虫，然后自己写了一个基于python做出的简单的爬虫，然后爬的网址是我经常去看电影的网址，爬取的内容是首页的图片，废话不多说上代码。 说明我用的 python 版本是 2.7 下载 还有就是python2.x 与 python3.x爬虫的语法仕不一样的 入门教程python 教程 爬虫教程教程 需要安装的插件1pip install urllib 1pip install urllib">
+<meta name="keywords" content="python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="简单的PYTHON爬虫 | COOSK琨琨">
+<meta property="og:url" content="http://yoursite.com/2017/11/22/简单的PYTHON爬虫/index.html">
+<meta property="og:site_name" content="COOSK琨琨">
+<meta property="og:description" content="学了一些爬虫，然后自己写了一个基于python做出的简单的爬虫，然后爬的网址是我经常去看电影的网址，爬取的内容是首页的图片，废话不多说上代码。 说明我用的 python 版本是 2.7 下载 还有就是python2.x 与 python3.x爬虫的语法仕不一样的 入门教程python 教程 爬虫教程教程 需要安装的插件1pip install urllib 1pip install urllib">
+<meta property="og:image" content="http://yoursite.com/2017/11/22/简单的PYTHON爬虫/TIM截图20171122210719.png">
+<meta property="og:image" content="http://yoursite.com/2017/11/22/简单的PYTHON爬虫/TIM截图20171122211328.png">
+<meta property="og:updated_time" content="2017-11-22T13:13:48.513Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="简单的PYTHON爬虫 | COOSK琨琨">
+<meta name="twitter:description" content="学了一些爬虫，然后自己写了一个基于python做出的简单的爬虫，然后爬的网址是我经常去看电影的网址，爬取的内容是首页的图片，废话不多说上代码。 说明我用的 python 版本是 2.7 下载 还有就是python2.x 与 python3.x爬虫的语法仕不一样的 入门教程python 教程 爬虫教程教程 需要安装的插件1pip install urllib 1pip install urllib">
+<meta name="twitter:image" content="http://yoursite.com/2017/11/22/简单的PYTHON爬虫/TIM截图20171122210719.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">COOSK琨琨</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          Cost the cold eyes on life,on dead.Houseman pass by!
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">博客</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+<nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+    
+      <!-- Github -->
+      <li class="navigation__item">
+        <a href="https://github.com/COOSK-KUNKUN" title="Huno on GitHub">
+          <i class='icon icon-social-github'></i>
+          <span class="label">GitHub</span>
+        </a>
+      </li>
+    
+
+    <!-- China social icon -->
+    <!--
+    
+      <li class="navigation__item">
+        <a href="" title="">
+          <i class='icon cs-icon-douban'></i>
+          <span class="label">Douban</span>
+        </a>
+      </li>
+
+      <li class="navigation__item">
+        <a href="" title="">
+          <i class='icon cs-icon-weibo'></i>
+          <span class="label">Weibo</span>
+        </a>
+      </li>
+
+    -->
+
+
+
+  </ul>
+</nav>
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">简单的PYTHON爬虫</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2017-11-22" class="post-meta__date date">2017-11-22</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+             &#8226; 标签:
+            <font class="tags">
+              <a class="tags-link" href="/tags/python/">python</a>
+            </font>
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <link rel="stylesheet" type="text/css" href="/assets/css/DPlayer.min.css"><script src="/assets/js/DPlayer.min.js"> </script><p>学了一些爬虫，然后自己写了一个基于python做出的简单的爬虫，然后爬的网址是我经常去看电影的网址，爬取的内容是首页的图片，废话不多说上代码。</p>
+<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>我用的 python 版本是 2.7 <a href="https://www.python.org/downloads/release/python-2712/" target="_blank" rel="external">下载</a></p>
+<p>还有就是python2.x 与 python3.x爬虫的语法仕不一样的</p>
+<h3 id="入门教程"><a href="#入门教程" class="headerlink" title="入门教程"></a>入门教程</h3><p>python <a href="https://www.w3cschool.cn/python/" target="_blank" rel="external">教程</a></p>
+<p>爬虫教程<a href="http://cuiqingcai.com/1052.html" target="_blank" rel="external">教程</a></p>
+<h3 id="需要安装的插件"><a href="#需要安装的插件" class="headerlink" title="需要安装的插件"></a>需要安装的插件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install urllib</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install urllib2</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install re</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install os</div></pre></td></tr></table></figure>
+<h3 id="代码如下"><a href="#代码如下" class="headerlink" title="代码如下"></a>代码如下</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: UTF-8 -*-</span></div><div class="line"></div><div class="line">import urllib</div><div class="line">import urllib2</div><div class="line">import re</div><div class="line">import os</div><div class="line"></div><div class="line">user_agent = <span class="string">'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'</span></div><div class="line">headers = &#123;<span class="string">'User_agent'</span>:user_agent&#125;</div><div class="line"></div><div class="line">url = <span class="string">'http://www.rarbt.com/'</span></div><div class="line">request = urllib2.Request(url, headers = headers)</div><div class="line">response = urllib2.urlopen(request)</div><div class="line">html = response.read().decode(<span class="string">'utf-8'</span>)</div><div class="line"></div><div class="line">def getImg(html):</div><div class="line">    imglist = re.findall(<span class="string">'img src="(http.*?)"'</span>,html)</div><div class="line">    <span class="comment"># 抓取图片的正则表达式</span></div><div class="line"></div><div class="line">    <span class="built_in">return</span> imglist</div><div class="line">    pass</div><div class="line"></div><div class="line">imagesUrl = getImg(html)</div><div class="line"></div><div class="line"><span class="keyword">if</span> os.path.exists(<span class="string">"D:/image"</span>) == False :</div><div class="line"><span class="comment"># 路径存在则返回True,路径损坏返回False</span></div><div class="line"></div><div class="line">    os.mkdir(<span class="string">"D:/image"</span>)</div><div class="line">    <span class="comment"># 创建一个在 D 盘为 imags 的文件夹</span></div><div class="line">    pass</div><div class="line"></div><div class="line">count = 0</div><div class="line"></div><div class="line"><span class="keyword">for</span> url <span class="keyword">in</span> imagesUrl:</div><div class="line">    <span class="built_in">print</span>(url)</div><div class="line">    <span class="keyword">if</span> (url.find(<span class="string">'.'</span>) != -1):</div><div class="line">        name = url[url.find(<span class="string">'.'</span>,len(url) - 5):];</div><div class="line">        request = urllib2.Request(url,headers = headers)</div><div class="line">        bytes = urllib2.urlopen(request)</div><div class="line">        f = open(<span class="string">"D:/image/"</span> + str(count) + name, <span class="string">"wb"</span>)</div><div class="line">        <span class="comment"># open(路径+文件名,读写模式)</span></div><div class="line">        <span class="comment">#读写模式:r只读,r+读写,w新建(会覆盖原有文件),a追加,b二进制文件.常用模式</span></div><div class="line"></div><div class="line">        f.write(bytes.read())</div><div class="line">        f.flush() <span class="comment"># 刷新</span></div><div class="line">        f.close() <span class="comment"># 关闭文件</span></div><div class="line">        count+=1</div><div class="line">        <span class="built_in">print</span> <span class="string">'get it'</span></div><div class="line">        pass</div><div class="line">    pass</div></pre></td></tr></table></figure>
+<h3 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h3><p>如果你运行后看到这些代码，说明你已经爬取成功了。然后去 D:/image 查看爬取的图片吧</p>
+<p><img src="/2017/11/22/简单的PYTHON爬虫/TIM截图20171122210719.png" alt=""><br><img src="/2017/11/22/简单的PYTHON爬虫/TIM截图20171122211328.png" alt=""></p>
+<h3 id="程序下载"><a href="#程序下载" class="headerlink" title="程序下载"></a>程序下载</h3><p>get_text_3.py<a href="https://github.com/COOSK-KUNKUN/my-study-in-python/tree/master/%E7%88%AC%E8%99%AB" target="_blank" rel="external">下载</a></p>
+
+  </section>
+
+  <section class="post-comments">
+
+    
+        <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://coosk-kunkun.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                            
+    
+    
+</section>
+
+
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>
