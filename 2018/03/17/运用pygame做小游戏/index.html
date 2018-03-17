@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      运用pygame做小游戏 | COOSK琨琨 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="COOSK-KUNKUN">
+    
+    
+
+    <meta name="description" content="最近学习了一下python中的pygame,跟这教程做了一个小游戏，然后自己在魔改了一下233，同时加入了背景音乐。缺点是飞碟撞到炮弹的时候自己会消失，但游戏不会结束！游戏不会结束！游戏不会结束！它一直还在循环，这个以后再决绝。 说明我用的 python 版本是 2.7 下载 入门教程python 教程 pygame 教程 小游戏 代码如下1234567891011121314151617181">
+<meta property="og:type" content="article">
+<meta property="og:title" content="运用pygame做小游戏 | COOSK琨琨">
+<meta property="og:url" content="http://yoursite.com/2018/03/17/运用pygame做小游戏/index.html">
+<meta property="og:site_name" content="COOSK琨琨">
+<meta property="og:description" content="最近学习了一下python中的pygame,跟这教程做了一个小游戏，然后自己在魔改了一下233，同时加入了背景音乐。缺点是飞碟撞到炮弹的时候自己会消失，但游戏不会结束！游戏不会结束！游戏不会结束！它一直还在循环，这个以后再决绝。 说明我用的 python 版本是 2.7 下载 入门教程python 教程 pygame 教程 小游戏 代码如下1234567891011121314151617181">
+<meta property="og:image" content="http://yoursite.com/2018/03/17/运用pygame做小游戏/1.png">
+<meta property="og:updated_time" content="2018-03-17T13:43:03.630Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="运用pygame做小游戏 | COOSK琨琨">
+<meta name="twitter:description" content="最近学习了一下python中的pygame,跟这教程做了一个小游戏，然后自己在魔改了一下233，同时加入了背景音乐。缺点是飞碟撞到炮弹的时候自己会消失，但游戏不会结束！游戏不会结束！游戏不会结束！它一直还在循环，这个以后再决绝。 说明我用的 python 版本是 2.7 下载 入门教程python 教程 pygame 教程 小游戏 代码如下1234567891011121314151617181">
+<meta name="twitter:image" content="http://yoursite.com/2018/03/17/运用pygame做小游戏/1.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">COOSK琨琨</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          Cost the cold eyes on life,on dead.Houseman pass by!
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">博客</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">关于</a></li>
+              
+                
+                <li class="navigation__item"><a href="/archive" title="" class="">归档</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+<nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+    
+      <!-- Github -->
+      <li class="navigation__item">
+        <a href="https://github.com/COOSK-KUNKUN" title="Huno on GitHub">
+          <i class='icon icon-social-github'></i>
+          <span class="label">GitHub</span>
+        </a>
+      </li>
+    
+
+    <!-- China social icon -->
+    <!--
+    
+      <li class="navigation__item">
+        <a href="" title="">
+          <i class='icon cs-icon-douban'></i>
+          <span class="label">Douban</span>
+        </a>
+      </li>
+
+      <li class="navigation__item">
+        <a href="" title="">
+          <i class='icon cs-icon-weibo'></i>
+          <span class="label">Weibo</span>
+        </a>
+      </li>
+
+    -->
+
+
+
+  </ul>
+</nav>
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">运用pygame做小游戏</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2018-03-17" class="post-meta__date date">2018-03-17</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <link rel="stylesheet" type="text/css" href="/assets/css/DPlayer.min.css"><script src="/assets/js/DPlayer.min.js"> </script><p>最近学习了一下python中的pygame,跟这教程做了一个小游戏，然后自己在魔改了一下233，同时加入了背景音乐。缺点是飞碟撞到炮弹的时候自己会消失，但游戏不会结束！游戏不会结束！游戏不会结束！它一直还在循环，这个以后再决绝。</p>
+<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>我用的 python 版本是 2.7 <a href="https://www.python.org/downloads/release/python-2712/" target="_blank" rel="external">下载</a></p>
+<h3 id="入门教程"><a href="#入门教程" class="headerlink" title="入门教程"></a>入门教程</h3><p>python <a href="https://www.w3cschool.cn/python/" target="_blank" rel="external">教程</a></p>
+<p>pygame <a href="http://eyehere.net/2011/python-pygame-novice-professional-1/" target="_blank" rel="external">教程</a></p>
+<h3 id="小游戏-代码如下"><a href="#小游戏-代码如下" class="headerlink" title="小游戏 代码如下"></a>小游戏 代码如下</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: UTF-8 -*-</span></div><div class="line"></div><div class="line">import pygame</div><div class="line">from pygame.locals import *</div><div class="line"></div><div class="line">import random</div><div class="line"></div><div class="line">SCREEN_HIGHT = 800</div><div class="line">SCREEN_WIDTH = 600</div><div class="line"></div><div class="line">pygame.init()</div><div class="line"><span class="comment"># 初始化pygame,为使用硬件做准备</span></div><div class="line"></div><div class="line">screen = pygame.display.set_mode((SCREEN_HIGHT, SCREEN_WIDTH), 0, 32)</div><div class="line"></div><div class="line">pygame.display.set_caption(<span class="string">'COOSK'</span>)</div><div class="line"></div><div class="line">filename = <span class="string">'Humming Urban Stereo - Scully Doesn_&amp;#039;t Know.mp3'</span></div><div class="line">pygame.mixer.music.load(filename)</div><div class="line">pygame.mixer.music.play(loops=0, start=0.0)</div><div class="line"></div><div class="line">class Player(pygame.sprite.Sprite):</div><div class="line">    <span class="string">""</span><span class="string">"Sprite 用来扩展的，可以包含想要在屏幕上呈现的对象一个或多个图形表示"</span><span class="string">""</span></div><div class="line">    def __init__(self):</div><div class="line">        super(Player, self).__init__()</div><div class="line">        <span class="string">''</span><span class="string">'self.surf = pygame.Surface((75, 25))'</span><span class="string">''</span></div><div class="line">        self.image = pygame.image.load(<span class="string">'飞碟.png'</span>).convert()</div><div class="line">        self.image.set_colorkey((255, 255, 255), RLEACCEL)</div><div class="line">        self.rect = self.image.get_rect()</div><div class="line">        <span class="comment"># Surface和 Rects是 PyGame 中的基本构件</span></div><div class="line">        <span class="comment"># 将 Surface 看作一张白纸，你可以在上面随意绘画</span></div><div class="line">        <span class="comment"># fill 设定Surface的颜色，使其和屏幕分离</span></div><div class="line">        <span class="comment"># Rects 是 Surface 中矩形区域的表示</span></div><div class="line">        <span class="comment"># 调用convert()创建副本，这样可以更快地将它画在屏幕上</span></div><div class="line">        <span class="comment"># set_colorkey用于设置图片的颜色</span></div><div class="line">        <span class="comment"># RLEACCEL 有助于 PyGame 在非加速显示器上更快地渲染</span></div><div class="line"></div><div class="line">    def update(self, pressed_keys):</div><div class="line">        <span class="keyword">if</span> pressed_keys[K_UP]:</div><div class="line">            self.rect.move_ip(0, -2)</div><div class="line">        <span class="keyword">elif</span> pressed_keys[K_DOWN]:</div><div class="line">            self.rect.move_ip(0, 2)</div><div class="line">        <span class="keyword">elif</span> pressed_keys[K_LEFT]:</div><div class="line">            self.rect.move_ip(-2, 0)</div><div class="line">        <span class="keyword">elif</span> pressed_keys[K_RIGHT]:</div><div class="line">            self.rect.move_ip(2, 0)</div><div class="line"></div><div class="line">        <span class="keyword">if</span> self.rect.left &lt; 0:</div><div class="line">            self.rect.left = 0</div><div class="line">        <span class="keyword">elif</span> self.rect.right &gt; 800:</div><div class="line">            self.rect.right = 800</div><div class="line">        <span class="keyword">if</span> self.rect.top &lt;= 0:</div><div class="line">            self.rect.top = 0</div><div class="line">        <span class="keyword">elif</span> self.rect.bottom &gt;= 600:</div><div class="line">            self.rect.bottom = 600</div><div class="line">            <span class="comment"># 限定player在屏幕中</span></div><div class="line"></div><div class="line">class Enemy(pygame.sprite.Sprite):</div><div class="line">    <span class="string">""</span><span class="string">"docstring for Enemy"</span><span class="string">""</span></div><div class="line">    def __init__(self):</div><div class="line">        super(Enemy, self).__init__()</div><div class="line">        <span class="string">''</span><span class="string">'self.surf = pygame.Surface((20, 10))'</span><span class="string">''</span></div><div class="line">        self.image = pygame.image.load(<span class="string">'炮弹.png'</span>).convert()</div><div class="line">        self.image.set_colorkey((255, 255, 255), RLEACCEL)</div><div class="line">        self.rect = self.image.get_rect(center=(820, random.randint(0, 600)))</div><div class="line">        self.speed = random.randint(1, 2)</div><div class="line">        <span class="comment"># 敌人从屏幕右边（820）的随机位置（0-600）上出现</span></div><div class="line"></div><div class="line">    def update(self):</div><div class="line">        self.rect.move_ip(-self.speed, 0)</div><div class="line">        <span class="keyword">if</span> self.rect.right &lt; 0:</div><div class="line">            self.kill()</div><div class="line">            <span class="comment"># 检测敌人右侧是否通过了屏幕左边边界</span></div><div class="line">            <span class="comment"># 当敌人通过屏幕的边界后，调用 Sprite 的内建方法kill()，从 sprite 组中删除它们</span></div><div class="line"></div><div class="line">class Cloud(pygame.sprite.Sprite):</div><div class="line">    <span class="string">""</span><span class="string">"docstring for Cloud"</span><span class="string">""</span></div><div class="line">    def __init__(self):</div><div class="line">        super(Cloud, self).__init__()</div><div class="line">        self.image = pygame.image.load(<span class="string">'白云.png'</span>).convert()</div><div class="line">        self.image.set_colorkey((0, 0, 0), RLEACCEL)</div><div class="line">        self.rect = self.image.get_rect(center = (random.randint(820, 900), random.randint(0, 600)))</div><div class="line"></div><div class="line">    def update(self):</div><div class="line">        self.rect.move_ip(-1, 0)</div><div class="line">        <span class="keyword">if</span> self.rect.right &lt; 0:</div><div class="line">            self.kill()</div><div class="line"></div><div class="line">player = Player()</div><div class="line"><span class="comment"># 初始化Player</span></div><div class="line"></div><div class="line">background = pygame.Surface(screen.get_size())</div><div class="line">background.fill((135,206,250))</div><div class="line"></div><div class="line">ADDENEMY= pygame.USEREVENT + 1</div><div class="line">enemies = pygame.sprite.Group()</div><div class="line">all_sprites = pygame.sprite.Group()</div><div class="line">all_sprites.add(player)</div><div class="line"><span class="comment"># Groups 是 Sprite 的集合, 用来包含游戏中的所有 Sprites</span></div><div class="line"><span class="comment"># 将 Player 添加到里面，因为它是我们目前唯一的 Sprite</span></div><div class="line"><span class="comment"># 为敌人创建一个 group 。 当我们调用 Sprite 的 kill() 方法时，sprite 将会从其所在的全部 group 中删除。</span></div><div class="line"></div><div class="line">ADDCLOUD = pygame.USEREVENT + 2</div><div class="line">clouds = pygame.sprite.Group()</div><div class="line"></div><div class="line">pygame.time.set_timer(ADDCLOUD, 1000)</div><div class="line">pygame.time.set_timer(ADDENEMY, 750)</div><div class="line"><span class="comment"># 每隔 750 毫秒触发一次 ADDENEMY 事件</span></div><div class="line"></div><div class="line">running = True</div><div class="line"></div><div class="line"><span class="keyword">while</span> running:</div><div class="line">    <span class="keyword">for</span> event <span class="keyword">in</span> pygame.event.get():</div><div class="line">        <span class="keyword">if</span> event.type == KEYDOWN:</div><div class="line">        <span class="comment"># 检测 KEYDOWN 事件: KEYDOWN 是 pygame.locals 中定义的常量</span></div><div class="line"></div><div class="line">            <span class="keyword">if</span> event.key == K_ESCAPE:</div><div class="line">                running = False</div><div class="line">                <span class="comment"># 如果按下 Esc 那么主循环终止</span></div><div class="line"></div><div class="line">        <span class="keyword">elif</span> event.type == QUIT:</div><div class="line">            running = False</div><div class="line">            <span class="comment"># 检测 QUIT : 如果 QUIT, 终止主循环</span></div><div class="line">            <span class="comment"># QUIT 用户按下关闭按钮</span></div><div class="line"></div><div class="line">        <span class="keyword">elif</span> event.type == ADDENEMY:</div><div class="line">            new_enemy = Enemy()</div><div class="line">            enemies.add(new_enemy)</div><div class="line">            all_sprites.add(new_enemy)</div><div class="line">            <span class="comment"># 监听 ADDENEMY 事件</span></div><div class="line">            <span class="comment"># 创建一个 Enemy类的实例,将实例添加到 enemies 这个 Sprite Group(检测冲突) 和 all_sprites Group（这样它会和其他对象一起渲染）</span></div><div class="line"></div><div class="line">        <span class="keyword">elif</span> event.type == ADDCLOUD:</div><div class="line">            new_cloud = Cloud()</div><div class="line">            clouds.add(new_cloud)</div><div class="line">            all_sprites.add(new_cloud)</div><div class="line"></div><div class="line">    pressed_keys = pygame.key.get_pressed()</div><div class="line"></div><div class="line">    player.update(pressed_keys)</div><div class="line">    enemies.update()</div><div class="line">    clouds.update()</div><div class="line"></div><div class="line">    screen.blit(background, (0, 0))</div><div class="line"></div><div class="line">    <span class="keyword">for</span> entity <span class="keyword">in</span> all_sprites:</div><div class="line">        screen.blit(entity.image, entity.rect)</div><div class="line">        <span class="comment"># 渲染</span></div><div class="line"></div><div class="line">    <span class="keyword">if</span> pygame.sprite.spritecollideany(player, enemies):</div><div class="line">        player.kill()</div><div class="line">        <span class="comment"># spritecollideany() 检测 Sprite 对象是否和 Sprite Group 中的其他 Sprites 冲突</span></div><div class="line"></div><div class="line">    pygame.display.flip()</div><div class="line">    <span class="comment"># 刷新</span></div></pre></td></tr></table></figure>
+<h3 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h3><p><img src="/2018/03/17/运用pygame做小游戏/1.png" alt=""></p>
+<h3 id="程序下载"><a href="#程序下载" class="headerlink" title="程序下载"></a>程序下载</h3><p>运用pygame做小游戏 <a href="https://github.com/COOSK-KUNKUN/my-study-in-python/tree/master/pygame/example_1" target="_blank" rel="external">下载</a></p>
+
+  </section>
+
+  <section class="post-comments">
+
+    
+        <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://coosk-kunkun.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                            
+    
+    
+</section>
+
+
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>
