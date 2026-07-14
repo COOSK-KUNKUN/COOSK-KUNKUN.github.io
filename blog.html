@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COOSK-KUNKUN</title>
+    <meta name="description" content="COOSK-KUNKUN 的随手笔记与收藏，记录想法，收集有趣的网站。">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="COOSK-KUNKUN">
+    <meta property="og:description" content="随手笔记与网站收藏。">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="blog-page">
+    <!-- 头部导航 -->
+    <header class="blog-header">
+        <div class="header-content">
+            <a href="index.html" class="header-logo">
+                <div class="header-logo-icon">C</div>
+                <span class="header-logo-text">COOSK-KUNKUN</span>
+            </a>
+            
+            <div class="header-actions">
+                <!-- 搜索框 -->
+                <div class="search-box">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <input type="text" class="search-input" id="searchInput" placeholder="搜索...">
+                </div>
+                
+                <!-- 主题切换 -->
+                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                    <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                    </svg>
+                    <svg class="moon-icon hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区域 -->
+    <main class="blog-main">
+        <!-- 左侧导航栏 -->
+        <aside class="sidebar">
+            <nav class="main-nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active" data-view="notes">
+                            <span class="nav-icon"></span>
+                            <span class="nav-text">随手笔记</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-view="collections">
+                            <span class="nav-icon">🔗</span>
+                            <span class="nav-text">随手收集</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- 内容区域 -->
+        <section class="content-area">
+            <!-- 随手笔记视图 -->
+            <div class="view-section" id="notesView">
+                <!-- 笔记列表 -->
+                <div class="notes-list" id="notesList">
+                    <!-- 笔记列表将通过 JS 动态生成 -->
+                </div>
+                <div class="empty-state hidden" id="notesEmpty">
+                    <div class="empty-icon">📝</div>
+                    <h3 class="empty-title">还没有笔记</h3>
+                    <p>开始记录你的第一篇笔记吧</p>
+                </div>
+
+                <!-- 笔记详情钻入视图 -->
+                <div class="note-detail-view hidden" id="noteDetailView">
+                    <div class="note-detail-header">
+                        <button class="note-back-btn" id="noteBackBtn" aria-label="返回笔记列表">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                            <span>返回</span>
+                        </button>
+                    </div>
+                    <article class="note-detail-content" id="noteDetailContent">
+                        <!-- 笔记内容将通过 JS 动态加载 -->
+                    </article>
+                </div>
+            </div>
+
+            <!-- 随手收集视图 -->
+            <div class="view-section hidden" id="collectionsView">
+                <!-- 树形收藏列表 -->
+                <div class="tree-container" id="treeContainer">
+                    <!-- 树形列表将通过 JS 动态生成 -->
+                </div>
+                
+                <!-- 底部信息栏 -->
+                <div class="tree-footer" id="treeFooter">
+                    <span class="record-count" id="recordCount">» 记录数:0</span>
+                    <span class="sort-control" id="sortControl">
+                        <span class="sort-icon">↻</span>
+                        <span>排序:</span>
+                        <span class="sort-arrow" id="sortArrow">↑</span>
+                    </span>
+                </div>
+                
+                <div class="empty-state hidden" id="collectionsEmpty">
+                    <div class="empty-icon">🔗</div>
+                    <h3 class="empty-title">暂无收藏</h3>
+                    <p>这个分类下还没有收藏内容</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 返回顶部按钮 -->
+    <button class="back-to-top" id="backToTop" aria-label="返回顶部">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+        </svg>
+    </button>
+
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
