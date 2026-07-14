@@ -7,10 +7,10 @@
 - 🎨 **现代设计** - 简约美观的卡片式布局
 - 🌓 **深色/浅色模式** - 自动跟随系统主题，也可手动切换
 - 📱 **响应式设计** - 完美适配手机、平板和桌面
--  **搜索功能** - 快速查找你需要的内容
+- 🔍 **搜索功能** - 快速查找你需要的内容
 - 📝 **随手笔记** - 日志/博客文章列表
 - 🔗 **随手收集** - 分类URL链接收藏（类似永硕E盘）
-- ⚡ **纯静态** - 无需后端，可直接部署到 GitHub Pages
+-  **纯静态** - 无需后端，可直接部署到 GitHub Pages
 
 ## 📁 项目结构
 
@@ -24,7 +24,7 @@
 │   └── note.css        # 笔记详情页样式
 ├── js/
 │   ├── data.js         # 数据配置（在这里添加你的内容）
-│   └── main.js         # 交互逻辑
+│   ── main.js         # 交互逻辑
 └── README.md           # 说明文档
 ```
 
@@ -76,7 +76,7 @@ collections: [
         title: '网站标题',
         description: '网站描述',
         url: 'https://example.com',
-        emoji: '',            // 卡片显示的图标
+        emoji: '🌐',            // 卡片显示的图标
         date: '2024-01-15'
     }
 ]
@@ -88,7 +88,7 @@ collections: [
 
 ```javascript
 collectionCategories: [
-    { id: 'my-category', name: '我的分类', icon: '' }
+    { id: 'my-category', name: '我的分类', icon: '📁' }
 ]
 ```
 
