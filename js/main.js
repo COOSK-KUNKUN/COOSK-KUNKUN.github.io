@@ -9,9 +9,44 @@ document.addEventListener('DOMContentLoaded', () => {
     initNav();
     initSearch();
     initBackToTop();
-    renderNotes();
+    loadNotes();
     // collectionTree 懒加载：首次进入"随手收集"视图时才加载 collections.js
 });
+
+// ========================================
+// 笔记数据加载
+// ========================================
+let notesLoaded = false;
+let notesLoading = false;
+
+async function loadNotes() {
+    if (notesLoaded) {
+        renderNotes();
+        return;
+    }
+    if (notesLoading) return;
+    notesLoading = true;
+
+    const notesList = document.getElementById('notesList');
+    const emptyState = document.getElementById('notesEmpty');
+
+    try {
+        const response = await fetch('notes/index.json');
+        if (!response.ok) throw new Error('加载失败');
+        const notes = await response.json();
+        siteData.notes = notes;
+        notesLoaded = true;
+        notesLoading = false;
+        renderNotes();
+    } catch (error) {
+        notesLoading = false;
+        if (notesList) notesList.classList.add('hidden');
+        if (emptyState) {
+            emptyState.classList.remove('hidden');
+            emptyState.innerHTML = '<p>笔记加载失败，请刷新重试</p>';
+        }
+    }
+}
 
 // ========================================
 // 主题切换
@@ -205,7 +240,7 @@ function renderNotes() {
 // ========================================
 // 笔记钻入/钻出
 // ========================================
-function drillIntoNote(noteId) {
+async function drillIntoNote(noteId) {
     const note = siteData.notes.find(n => n.id == noteId);
     if (!note) return;
 
@@ -213,25 +248,60 @@ function drillIntoNote(noteId) {
     const detailView = document.getElementById('noteDetailView');
     const detailContent = document.getElementById('noteDetailContent');
 
-    // 渲染笔记详情
+    // 先显示加载状态
     detailContent.innerHTML = `
         <h1 class="detail-title">${escapeHtml(note.title)}</h1>
         <div class="detail-meta">
             <span class="detail-date">${formatDateFull(note.date)}</span>
-            ${note.tags && note.tags.length > 0 ? `
-                <div class="detail-tags">
-                    ${note.tags.map(tag => `<span class="detail-tag">${escapeHtml(tag)}</span>`).join('')}
-                </div>
-            ` : ''}
         </div>
-        <div class="detail-body">${note.content || `<p>${escapeHtml(note.excerpt)}</p>`}</div>
+        <div class="detail-body"><p>加载中...</p></div>
     `;
-
-    // 列表滑出 + 详情滑入
     notesList.classList.add('hidden');
     detailView.classList.remove('hidden');
     detailView.classList.remove('drilling-out');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // 从 HTML 文件加载内容
+    try {
+        const response = await fetch(note.url);
+        if (!response.ok) throw new Error('加载失败');
+        const html = await response.text();
+        
+        // 解析 HTML 并提取笔记正文
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const noteBody = doc.querySelector('.note-body');
+        const noteTitle = doc.querySelector('.note-title');
+        const noteDate = doc.querySelector('.note-date');
+        const noteTags = doc.querySelectorAll('.note-tag');
+        
+        // 更新内容
+        let metaHtml = '';
+        if (noteDate) {
+            metaHtml += `<span class="detail-date">${noteDate.textContent}</span>`;
+        }
+        if (noteTags && noteTags.length > 0) {
+            metaHtml += `<div class="detail-tags">`;
+            noteTags.forEach(tag => {
+                metaHtml += `<span class="detail-tag">${escapeHtml(tag.textContent)}</span>`;
+            });
+            metaHtml += `</div>`;
+        }
+        
+        detailContent.innerHTML = `
+            <h1 class="detail-title">${escapeHtml(noteTitle ? noteTitle.textContent : note.title)}</h1>
+            <div class="detail-meta">${metaHtml}</div>
+            <div class="detail-body">${noteBody ? noteBody.innerHTML : '<p>内容为空</p>'}</div>
+        `;
+    } catch (error) {
+        detailContent.innerHTML = `
+            <h1 class="detail-title">${escapeHtml(note.title)}</h1>
+            <div class="detail-meta">
+                <span class="detail-date">${formatDateFull(note.date)}</span>
+            </div>
+            <div class="detail-body"><p>内容加载失败，请刷新重试</p></div>
+        `;
+    }
 }
 
 function drillOutOfNote() {
