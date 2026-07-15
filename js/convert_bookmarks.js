@@ -125,7 +125,7 @@ const siteData = {
         {
             id: 1,
             title: '我的第一篇笔记',
-            excerpt: '这是我在 COOSK-KUNKUN 的第一篇笔记，记录一些想法和感悟...',
+            excerpt: '这是我在 COOSK琨琨 的第一篇笔记，记录一些想法和感悟...',
             content: '完整内容...',
             date: '2024-01-30',
             tags: ['随笔', '生活'],

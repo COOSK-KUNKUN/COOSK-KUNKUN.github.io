@@ -1,4 +1,4 @@
-# COOSK-KUNKUN 静态博客
+# COOSK琨琨 静态博客
 
 一个简洁美观的个人静态博客/书签导航网站，适合部署到 GitHub Pages。
 
@@ -118,4 +118,4 @@ MIT License - 可自由使用
 
 ---
 
-Made with ❤️ by COOSK-KUNKUN
+Made with ❤️ by COOSK琨琨

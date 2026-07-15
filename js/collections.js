@@ -515,7 +515,7 @@ window.__siteCollections = [
           },
           {
             "id": "item_82",
-            "name": "LP文字游戏平台-在线文字游戏编辑器-在线文字游戏引擎-文字游戏-文字游戏编辑器-文字游戏引擎-在线制作文字游戏-数值游戏编辑器-手机文字游戏-UGC平台-文字游戏UGC",
+            "name": "LP文字游戏平台-在线文字游戏编辑器",
             "url": "https://www.lpengine.cn/",
             "date": "2024-01-01"
           },
@@ -4043,12 +4043,6 @@ window.__siteCollections = [
         "date": "2024-01-01"
       },
       {
-        "id": "item_669",
-        "name": "<夏暖i> 资源网盘",
-        "url": "http://xianuani.ysepan.com/",
-        "date": "2024-01-01"
-      },
-      {
         "id": "item_670",
         "name": "琳芙物語のGTA科研所 网盘11周年",
         "url": "http://vcpdnj.ysepan.com/",
@@ -4070,12 +4064,6 @@ window.__siteCollections = [
         "id": "item_673",
         "name": "天地之间",
         "url": "http://jiao111.ysepan.com/",
-        "date": "2024-01-01"
-      },
-      {
-        "id": "item_674",
-        "name": "<font size=\"6\">谈魈疯生</font>",
-        "url": "http://txfs.ysepan.com/",
         "date": "2024-01-01"
       },
       {
@@ -4112,12 +4100,6 @@ window.__siteCollections = [
         "id": "item_680",
         "name": "寒雪使者",
         "url": "http://lhcsnow.ysepan.com/",
-        "date": "2024-01-01"
-      },
-      {
-        "id": "item_681",
-        "name": "渣渣皮",
-        "url": "http://zhazhapi.ysepan.com/",
         "date": "2024-01-01"
       },
       {
@@ -4187,12 +4169,6 @@ window.__siteCollections = [
         "date": "2024-01-01"
       },
       {
-        "id": "item_693",
-        "name": "世界之塔图书馆",
-        "url": "http://toweroftheworld.ysepan.com/",
-        "date": "2024-01-01"
-      },
-      {
         "id": "item_694",
         "name": "陈蛋蛋的宝藏库",
         "url": "http://chendandan.ysepan.com/",
@@ -4217,12 +4193,6 @@ window.__siteCollections = [
         "date": "2024-01-01"
       },
       {
-        "id": "item_698",
-        "name": "世界之塔图书馆",
-        "url": "http://toweroftheworld.ysepan.com/?xzpd=1",
-        "date": "2024-01-01"
-      },
-      {
         "id": "item_699",
         "name": "用来存储一些稀有小说",
         "url": "http://yys5.ysepan.com/",
@@ -4234,12 +4204,6 @@ window.__siteCollections = [
         "url": "http://yys6.ysepan.com/",
         "date": "2024-01-01"
       },
-      {
-        "id": "item_701",
-        "name": "绯玉丸の小仓库丨绯玉丸的小仓库丨【以免迷路，请勿务必Ctrl+D收藏网址】",
-        "url": "http://feiyuwanovo.ysepan.com/",
-        "date": "2024-01-01"
-      }
     ]
   },
   {
