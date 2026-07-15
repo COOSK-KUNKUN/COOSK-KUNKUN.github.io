@@ -2303,21 +2303,9 @@ window.__siteCollections = [
             "date": "2024-01-01"
           },
           {
-            "id": "item_382",
-            "name": "SoBooks - 一起分享阅读的乐趣~",
-            "url": "https://sobooks.cc/",
-            "date": "2024-01-01"
-          },
-          {
             "id": "item_383",
             "name": "Z-Library – 世界上最大的电子图书馆。自由访问知识和文化。",
             "url": "https://zh.zlii.ru/",
-            "date": "2024-01-01"
-          },
-          {
-            "id": "item_384",
-            "name": "书葵网_海量图书检索下载",
-            "url": "https://www.shukui.net/?ref=www.imi123.cn",
             "date": "2024-01-01"
           },
           {
