@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高级调整面板 - 新设计预览</title>
+    <style>
+        /* CSS 变量 - 浅色主题 */
+        :root {
+            --bg-primary: #f5f5f7;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --text-primary: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --text-muted: #86868b;
+            --accent-color: #0071e3;
+            --accent-hover: #0077ed;
+            --border-color: #d2d2d7;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.12);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* 深色主题 */
+        [data-theme="dark"] {
+            --bg-primary: #1d1d1f;
+            --bg-secondary: #2d2d2f;
+            --bg-card: #2d2d2f;
+            --text-primary: #f5f5f7;
+            --text-secondary: #a1a1a6;
+            --text-muted: #6e6e73;
+            --accent-color: #2997ff;
+            --accent-hover: #64b5f6;
+            --border-color: #424245;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .preview-container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .preview-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .preview-header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .preview-header p {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        /* 高级调整折叠：现代卡片式设计 */
+        .bg-advanced-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            width: 100%;
+            margin-top: 0.75rem;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 0.8125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .bg-advanced-toggle:hover {
+            border-color: var(--accent-color);
+            background: var(--bg-card);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .bg-adv-toggle-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: linear-gradient(135deg, var(--accent-color), #6c5ce7);
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .bg-adv-toggle-text {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .bg-adv-toggle-sub {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 400;
+            margin-left: auto;
+        }
+
+        .bg-adv-arrow {
+            flex-shrink: 0;
+            color: var(--text-muted);
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .bg-advanced-toggle:hover .bg-adv-arrow {
+            color: var(--accent-color);
+        }
+
+        /* 展开时：底角拉直，与下方内容卡片拼接 */
+        .bg-advanced-toggle.open {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            border-color: var(--accent-color);
+            border-bottom-color: transparent;
+            background: var(--bg-card);
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .bg-advanced-toggle.open .bg-adv-toggle-icon {
+            background: linear-gradient(135deg, #6c5ce7, var(--accent-color));
+        }
+
+        .bg-advanced-toggle.open .bg-adv-arrow {
+            transform: rotate(180deg);
+            color: var(--accent-color);
+        }
+
+        .bg-advanced {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            padding: 1rem;
+            border: 1px solid var(--accent-color);
+            border-top: none;
+            border-bottom-left-radius: var(--radius-sm);
+            border-bottom-right-radius: var(--radius-sm);
+            background: var(--bg-card);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .bg-advanced.collapsed {
+            display: none;
+        }
+
+        /* 展开时负 margin 抵消 flex gap */
+        .bg-advanced-toggle.open + .bg-advanced {
+            margin-top: -0.5rem;
+        }
+
+        /* 高级调整内部区块 */
+        .bg-adv-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .bg-adv-section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .bg-adv-section-title {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* 框选模式网格：单行紧凑按钮 */
+        .bg-adv-mode-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 0.5rem;
+        }
+
+        .bg-adv-mode-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 0.6rem;
+            border: 1.5px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            font-size: 0.8125rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .bg-adv-mode-btn:hover {
+            border-color: var(--accent-color);
+            background: var(--bg-card);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .bg-adv-mode-btn.active {
+            border-color: var(--accent-color);
+            background: rgba(0, 113, 227, 0.06);
+            color: var(--accent-color);
+            box-shadow: 0 0 0 1px var(--accent-color);
+        }
+
+        .bg-adv-mode-icon-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            flex-shrink: 0;
+        }
+
+        .bg-protect-color {
+            background: rgba(240, 192, 64, 0.12);
+            color: #d4a017;
+        }
+
+        .bg-subject-color {
+            background: rgba(74, 158, 255, 0.12);
+            color: #4a9eff;
+        }
+
+        .bg-adv-mode-name {
+            font-weight: 600;
+            font-size: 0.8125rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 0;
+        }
+
+        .bg-adv-mode-btn .bg-info-dot {
+            flex-shrink: 0;
+            margin-left: auto;
+            padding-left: 0.25rem;
+        }
+
+        /* 提示文字 */
+        .bg-adv-hint {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin: 0;
+            padding: 0.6rem 0.75rem;
+            background: var(--bg-primary);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .bg-adv-hint svg {
+            flex-shrink: 0;
+            margin-top: 1px;
+            color: var(--accent-color);
+        }
+
+        /* 分隔线 */
+        .bg-adv-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 0.5rem 0;
+        }
+
+        /* 边缘精修开关 */
+        .bg-adv-check {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.75rem 0.85rem;
+            border-radius: var(--radius-sm);
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .bg-adv-check:hover {
+            border-color: var(--accent-color);
+            background: var(--bg-card);
+        }
+
+        .bg-adv-check-left {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .bg-adv-check-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(108, 92, 231, 0.1);
+            color: #6c5ce7;
+            flex-shrink: 0;
+        }
+
+        .bg-adv-check-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+            min-width: 0;
+        }
+
+        .bg-adv-check-name {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .bg-adv-check-desc {
+            font-size: 0.6875rem;
+            color: var(--text-muted);
+        }
+
+        /* 开关样式 */
+        .bg-adv-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .bg-adv-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .bg-adv-switch-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--border-color);
+            border-radius: 24px;
+            transition: all 0.25s ease;
+        }
+
+        .bg-adv-switch-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background: #fff;
+            border-radius: 50%;
+            transition: all 0.25s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .bg-adv-switch input:checked + .bg-adv-switch-slider {
+            background: var(--accent-color);
+        }
+
+        .bg-adv-switch input:checked + .bg-adv-switch-slider:before {
+            transform: translateX(20px);
+        }
+
+        /* 框计数栏 - 紧凑单行工具栏 */
+        .bg-box-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            margin-top: 0.25rem;
+            padding: 0.35rem 0.6rem;
+            background: var(--bg-primary);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            min-height: 36px;
+        }
+
+        .bg-box-counts {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .bg-box-count-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            padding: 0;
+            background: transparent;
+        }
+
+        .bg-box-count-item b {
+            font-weight: 700;
+            font-size: 0.8125rem;
+        }
+
+        .bg-box-count-item.bg-subject-color {
+            color: #4a9eff;
+        }
+
+        .bg-box-count-item.bg-subject-color b {
+            color: #4a9eff;
+        }
+
+        .bg-box-count-item.bg-protect-color {
+            color: #d4a017;
+        }
+
+        .bg-box-count-item.bg-protect-color b {
+            color: #d4a017;
+        }
+
+        .bg-box-actions {
+            display: flex;
+            gap: 0.4rem;
+            align-items: center;
+        }
+
+        .bg-icon-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            padding: 0;
+            position: relative;
+        }
+
+        .bg-icon-btn:hover {
+            transform: scale(1.08);
+        }
+
+        .bg-icon-btn:active {
+            transform: scale(0.93);
+        }
+
+        .bg-icon-btn.danger {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .bg-icon-btn.danger:hover {
+            background: #fecaca;
+        }
+
+        .bg-icon-btn.secondary {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .bg-icon-btn.secondary:hover {
+            background: #e5e7eb;
+        }
+
+        [data-theme="dark"] .bg-icon-btn.danger {
+            background: rgba(220, 38, 38, 0.2);
+            color: #f87171;
+        }
+
+        [data-theme="dark"] .bg-icon-btn.danger:hover {
+            background: rgba(220, 38, 38, 0.3);
+        }
+
+        [data-theme="dark"] .bg-icon-btn.secondary {
+            background: rgba(107, 114, 128, 0.2);
+            color: #9ca3af;
+        }
+
+        [data-theme="dark"] .bg-icon-btn.secondary:hover {
+            background: rgba(107, 114, 128, 0.3);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* ⓘ 信息图标 */
+        .bg-info {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            cursor: help;
+            border-radius: 50%;
+            transition: color 0.15s ease;
+        }
+
+        .bg-info:hover {
+            color: var(--accent-color);
+        }
+
+        .bg-info-dot {
+            margin-left: 0.35rem;
+            vertical-align: -2px;
+            opacity: 0.7;
+            color: inherit;
+            cursor: help;
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">切换主题</button>
+    
+    <div class="preview-container">
+        <div class="preview-header">
+            <h1>高级调整面板 - 新设计</h1>
+            <p>点击折叠按钮展开/收起面板</p>
+        </div>
+
+        <!-- 高级调整：默认折叠 -->
+        <button class="bg-advanced-toggle" id="advToggle" aria-expanded="false">
+            <div class="bg-adv-toggle-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+            </div>
+            <span class="bg-adv-toggle-text">高级调整</span>
+            <span class="bg-adv-toggle-sub">框选 · 边缘精修</span>
+            <svg class="bg-adv-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"/>
+            </svg>
+        </button>
+
+        <div class="bg-advanced collapsed" id="advPanel">
+            <!-- 框选模式 -->
+            <div id="boxModeGroup">
+                <div class="bg-adv-section">
+                    <div class="bg-adv-section-header">
+                        <span class="bg-adv-section-title">框选模式</span>
+                        <span class="bg-info" tabindex="0" role="button" aria-label="说明" data-tip="选择框选类型，在画布上拖拽绘制矩形区域">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="bg-adv-mode-grid" id="modeSeg">
+                        <button class="bg-adv-mode-btn" data-mode="protect">
+                            <span class="bg-adv-mode-icon-wrap bg-protect-color">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="4 3"/>
+                                    <path d="M12 8v8M8 12h8"/>
+                                </svg>
+                            </span>
+                            <span class="bg-adv-mode-name">保护框</span>
+                            <span class="bg-info bg-info-dot" aria-hidden="true" data-tip="框内像素强制保留（如被误切的深色区），可画多个。">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+                                </svg>
+                            </span>
+                        </button>
+                        <button class="bg-adv-mode-btn active" data-mode="subject">
+                            <span class="bg-adv-mode-icon-wrap bg-subject-color">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="4 3"/>
+                                    <circle cx="12" cy="9.5" r="2.5"/>
+                                    <path d="M7 18a5 5 0 0 1 10 0"/>
+                                </svg>
+                            </span>
+                            <span class="bg-adv-mode-name">主体框</span>
+                            <span class="bg-info bg-info-dot" aria-hidden="true" data-tip="只保留框内主体，框外一律透明，可画多个。">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+                                </svg>
+                            </span>
+                        </button>
+                    </div>
+                    <p class="bg-adv-hint">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+                        </svg>
+                        选保护框/主体框后，在空白处拖拽画框；点框可拖动、拉四角缩放，框顶红点或 Delete 键删除。
+                    </p>
+
+                    <!-- 计数 + 删除/清空 -->
+                    <div class="bg-box-bar" id="boxBar">
+                        <div class="bg-box-counts">
+                            <span class="bg-box-count-item bg-subject-color">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                                主体框 <b id="cntSubject">2</b>
+                            </span>
+                            <span class="bg-box-count-item bg-protect-color">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                                保护框 <b id="cntProtect">1</b>
+                            </span>
+                        </div>
+                        <div class="bg-box-actions">
+                            <button class="bg-icon-btn danger" id="delBtn" data-tip="删除选中" aria-label="删除选中">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            </button>
+                            <button class="bg-icon-btn secondary" id="clearBtn" data-tip="清空全部" aria-label="清空全部">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <label class="bg-adv-check">
+                <div class="bg-adv-check-left">
+                    <div class="bg-adv-check-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <div class="bg-adv-check-info">
+                        <span class="bg-adv-check-name">边缘精修</span>
+                    </div>
+                </div>
+                <div class="bg-adv-switch">
+                    <input type="checkbox" id="refineChk">
+                    <span class="bg-adv-switch-slider"></span>
+                </div>
+                <span class="bg-info" tabindex="0" role="button" aria-label="说明" data-tip="对边缘做收缩 + 羽化，去除白边、柔化锯齿。发丝多的图慎用。">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+                    </svg>
+                </span>
+            </label>
+        </div>
+    </div>
+
+    <script>
+        // 折叠/展开
+        const advToggle = document.getElementById('advToggle');
+        const advPanel = document.getElementById('advPanel');
+        
+        advToggle.addEventListener('click', () => {
+            const expanded = advToggle.getAttribute('aria-expanded') === 'true';
+            advToggle.setAttribute('aria-expanded', String(!expanded));
+            advToggle.classList.toggle('open', !expanded);
+            advPanel.classList.toggle('collapsed', expanded);
+        });
+
+        // 模式按钮切换
+        const modeBtns = document.querySelectorAll('.bg-adv-mode-btn');
+        modeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                modeBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        // 主题切换
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+        }
+
+        // Tooltip 功能（支持 .bg-info 和 .bg-icon-btn）
+        document.addEventListener('mouseover', (e) => {
+            const el = e.target.closest('.bg-info, .bg-icon-btn');
+            if (el) {
+                showTooltip(el);
+            }
+        });
+
+        document.addEventListener('mouseout', (e) => {
+            if (e.target.closest('.bg-info, .bg-icon-btn')) {
+                hideTooltip();
+            }
+        });
+
+        let tooltip = null;
+
+        function showTooltip(el) {
+            hideTooltip();
+            const text = el.getAttribute('data-tip');
+            if (!text) return;
+            
+            tooltip = document.createElement('div');
+            tooltip.style.cssText = `
+                position: fixed;
+                z-index: 2000;
+                max-width: 260px;
+                padding: 0.6rem 0.75rem;
+                background: #1d1d1f;
+                color: #f5f5f7;
+                font-size: 0.75rem;
+                line-height: 1.55;
+                border-radius: 8px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+                white-space: pre-wrap;
+                pointer-events: none;
+            `;
+            tooltip.textContent = text;
+            document.body.appendChild(tooltip);
+
+            const r = el.getBoundingClientRect();
+            const tr = tooltip.getBoundingClientRect();
+            let top = r.top - tr.height - 8;
+            if (top < 8) top = r.bottom + 8;
+            let left = r.left + r.width / 2 - tr.width / 2;
+            left = Math.max(8, Math.min(left, window.innerWidth - tr.width - 8));
+            tooltip.style.top = top + 'px';
+            tooltip.style.left = left + 'px';
+        }
+
+        function hideTooltip() {
+            if (tooltip) {
+                tooltip.remove();
+                tooltip = null;
+            }
+        }
+    </script>
+</body>
+</html>

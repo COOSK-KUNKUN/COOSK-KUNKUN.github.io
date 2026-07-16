@@ -106,6 +106,14 @@ function initNav() {
             drillOutOfNote();
         });
     }
+
+    // 绑定工具返回按钮
+    const toolBackBtn = document.getElementById('toolBackBtn');
+    if (toolBackBtn) {
+        toolBackBtn.addEventListener('click', () => {
+            drillOutOfTool();
+        });
+    }
 }
 
 function switchView(view) {
@@ -116,17 +124,31 @@ function switchView(view) {
         link.classList.toggle('active', link.dataset.view === view);
     });
     
-    // 切换视图
-    const notesView = document.getElementById('notesView');
-    const collectionsView = document.getElementById('collectionsView');
+    // 隐藏所有视图
+    document.querySelectorAll('.view-section').forEach(s => s.classList.add('hidden'));
     
+    // 显示目标视图
     if (view === 'notes') {
-        notesView.classList.remove('hidden');
-        collectionsView.classList.add('hidden');
-    } else {
-        notesView.classList.add('hidden');
-        collectionsView.classList.remove('hidden');
+        document.getElementById('notesView').classList.remove('hidden');
+    } else if (view === 'collections') {
+        document.getElementById('collectionsView').classList.remove('hidden');
         ensureCollectionsLoaded();
+    } else if (view === 'tools') {
+        document.getElementById('toolsView').classList.remove('hidden');
+        // 如果当前在工具详情钻入状态，先退回网格
+        const detailView = document.getElementById('toolDetailView');
+        const grid = document.getElementById('toolsGrid');
+        if (detailView && !detailView.classList.contains('hidden')) {
+            if (currentToolModule && typeof currentToolModule.unmount === 'function') {
+                currentToolModule.unmount();
+            }
+            currentToolModule = null;
+            detailView.classList.add('hidden');
+            detailView.classList.remove('drilling-out');
+            document.getElementById('toolDetailContent').innerHTML = '';
+            grid.classList.remove('hidden');
+        }
+        ensureToolsLoaded();
     }
 }
 
@@ -178,8 +200,10 @@ function initSearch() {
             searchQuery = e.target.value.trim().toLowerCase();
             if (currentView === 'notes') {
                 renderNotes();
-            } else {
+            } else if (currentView === 'collections') {
                 renderCollectionTree();
+            } else if (currentView === 'tools') {
+                renderToolsGrid();
             }
         }, 300);
     });
@@ -504,6 +528,125 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// ========================================
+// 工具箱：懒加载 + 渲染 + 钻入/钻出
+// ========================================
+let toolsLoaded = false;
+let toolsLoading = false;
+let currentToolModule = null;
+
+function ensureToolsLoaded() {
+    if (toolsLoaded) {
+        renderToolsGrid();
+        return;
+    }
+    if (toolsLoading) return;
+    toolsLoading = true;
+
+    const grid = document.getElementById('toolsGrid');
+    if (grid) grid.innerHTML = '<div class="tool-loading"><div class="tool-loading-spinner"></div><span>加载工具列表…</span></div>';
+
+    const script = document.createElement('script');
+    script.src = 'js/tools/registry.js';
+    script.onload = () => {
+        toolsLoaded = true;
+        toolsLoading = false;
+        renderToolsGrid();
+    };
+    script.onerror = () => {
+        toolsLoading = false;
+        if (grid) grid.innerHTML = '<div class="tool-loading">工具列表加载失败</div>';
+    };
+    document.head.appendChild(script);
+}
+
+function renderToolsGrid() {
+    const grid = document.getElementById('toolsGrid');
+    const emptyState = document.getElementById('toolsEmpty');
+    if (!grid) return;
+
+    const tools = window.__toolRegistry || [];
+
+    // 搜索过滤
+    let filtered = tools;
+    if (searchQuery) {
+        filtered = tools.filter(t =>
+            t.name.toLowerCase().includes(searchQuery) ||
+            (t.desc || '').toLowerCase().includes(searchQuery)
+        );
+    }
+
+    if (filtered.length === 0) {
+        grid.classList.add('hidden');
+        if (emptyState) emptyState.classList.remove('hidden');
+        return;
+    }
+
+    grid.classList.remove('hidden');
+    if (emptyState) emptyState.classList.add('hidden');
+
+    grid.innerHTML = filtered.map(tool => `
+        <div class="tool-card" data-tool-id="${tool.id}">
+            <div class="tool-card-icon">${tool.icon}</div>
+            <h3 class="tool-card-name">${escapeHtml(tool.name)}</h3>
+            <p class="tool-card-desc">${escapeHtml(tool.desc || '')}</p>
+        </div>
+    `).join('');
+
+    // 绑定点击钻入
+    grid.querySelectorAll('.tool-card').forEach(card => {
+        card.addEventListener('click', () => {
+            drillIntoTool(card.dataset.toolId);
+        });
+    });
+}
+
+async function drillIntoTool(toolId) {
+    const tool = (window.__toolRegistry || []).find(t => t.id === toolId);
+    if (!tool) return;
+
+    const grid = document.getElementById('toolsGrid');
+    const detailView = document.getElementById('toolDetailView');
+    const detailContent = document.getElementById('toolDetailContent');
+
+    // 显示加载状态
+    detailContent.innerHTML = '<div class="tool-loading"><div class="tool-loading-spinner"></div><span>加载工具…</span></div>';
+    grid.classList.add('hidden');
+    detailView.classList.remove('hidden');
+    detailView.classList.remove('drilling-out');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    try {
+        const module = await tool.loader();
+        currentToolModule = module;
+        module.mount(detailContent);
+    } catch (e) {
+        console.error('Tool load error:', e);
+        detailContent.innerHTML = '<div class="tool-loading">工具加载失败，请刷新重试</div>';
+    }
+}
+
+function drillOutOfTool() {
+    const grid = document.getElementById('toolsGrid');
+    const detailView = document.getElementById('toolDetailView');
+    const detailContent = document.getElementById('toolDetailContent');
+
+    // 调用工具的 unmount 清理
+    if (currentToolModule && typeof currentToolModule.unmount === 'function') {
+        currentToolModule.unmount();
+    }
+    currentToolModule = null;
+
+    detailView.classList.add('drilling-out');
+
+    setTimeout(() => {
+        detailView.classList.add('hidden');
+        detailView.classList.remove('drilling-out');
+        grid.classList.remove('hidden');
+        detailContent.innerHTML = '';
+    }, 280);
+}
 
 // ========================================
 // 返回顶部

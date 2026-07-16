@@ -1188,6 +1188,1127 @@ body {
 }
 
 /* ========================================
+   工具箱视图
+   ======================================== */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1.5rem;
+}
+
+.tool-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.tool-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.tool-card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.tool-card-name {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.tool-card-desc {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+/* 工具详情钻入视图 */
+.tool-detail-view {
+    animation: drillIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tool-detail-view.drilling-out {
+    animation: drillOut 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tool-detail-header {
+    margin-bottom: 1.5rem;
+}
+
+.tool-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 50px;
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.tool-back-btn:hover {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+
+.tool-detail-content {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    padding: 2rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.tool-detail-content h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+/* 工具通用组件 */
+.tool-hint {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+}
+
+.tool-textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.875rem;
+    resize: vertical;
+    transition: border-color 0.2s ease;
+}
+
+.tool-textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+.tool-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+}
+
+.tool-btn {
+    padding: 0.625rem 1.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: 50px;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tool-btn:hover {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+
+.tool-btn-primary {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+
+.tool-btn-primary:hover {
+    background: var(--accent-hover);
+}
+
+.tool-output {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--bg-primary);
+    border-radius: var(--radius-sm);
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.875rem;
+    white-space: pre-wrap;
+    word-break: break-all;
+    color: var(--text-primary);
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* 上传区域 */
+.upload-area {
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 3rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    color: var(--text-muted);
+}
+
+.upload-area:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+.upload-area.dragover {
+    border-color: var(--accent-color);
+    background: rgba(0, 113, 227, 0.05);
+}
+
+/* 预览/结果区域 */
+.preview-area,
+.result-area {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.preview-area img,
+.result-area img {
+    max-width: 100%;
+    max-height: 400px;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 1rem;
+}
+
+/* 加载状态 */
+.tool-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem;
+    color: var(--text-muted);
+}
+
+.tool-loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--accent-color);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* 工具网格退出动画 */
+.tools-grid.drilling-out {
+    animation: drillOut 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ========================================
+   抠图编辑器（两栏：画布 + 设置）
+   ======================================== */
+.bg-editor {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    align-items: start;
+}
+
+/* 横向（宽）图片：改为上下布局，图在上、设置在下，让横图显示更大 */
+.bg-editor.landscape {
+    grid-template-columns: 1fr;
+}
+.bg-editor.landscape .bg-settings {
+    max-height: none;      /* 放开高度限制，设置区自然铺开在图片下方 */
+    overflow-y: visible;
+}
+/* 上下布局时底部操作栏横向排列，节省垂直空间 */
+.bg-editor.landscape .bg-settings-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.bg-editor.landscape .bg-settings-actions .tool-btn {
+    flex: 1;
+    min-width: 140px;
+}
+
+.bg-canvas-wrap {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.bg-canvas-stage {
+    position: relative;
+    height: 480px; /* JS 会按图片比例覆盖 */
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.bg-canvas-stage canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    touch-action: none;
+}
+
+/* SAM 蚁行线覆盖层：绝对定位覆盖在主 canvas 上方，pointer-events: none 让点击穿透 */
+.sam-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* 画布右上角浮动工具条 */
+.bg-tools {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+    z-index: 2;
+}
+
+.bg-tool {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.bg-tool:hover {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.bg-tool.active {
+    background: var(--accent-color);
+    color: #fff;
+}
+
+/* 画框工具高亮时用各自的框体色，呼应画布上的框 */
+.bg-tool.tool-protect.active { background: #f0c040; color: #3a2e00; }
+.bg-tool.tool-subject.active { background: #4a9eff; color: #fff; }
+
+/* ===== SAM 框选分割 POC ===== */
+.sam-editor {
+    display: grid;
+    grid-template-columns: 1fr 240px;
+    gap: 1.25rem;
+    align-items: start;
+}
+
+.sam-canvas-wrap { min-width: 0; }
+
+.sam-stage {
+    position: relative;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.sam-stage canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+}
+
+.sam-ants { cursor: crosshair; }
+
+.sam-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.sam-seg {
+    display: inline-flex;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.sam-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.sam-stat {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    padding: 0.5rem 0.75rem;
+    background: var(--bg-primary);
+    border-radius: var(--radius-sm);
+}
+
+.sam-hint {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+    .sam-editor { grid-template-columns: 1fr; }
+}
+
+.bg-canvas-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+}
+
+.bg-canvas-tip {
+    margin-left: auto;
+    font-size: 0.75rem;
+}
+
+.tool-btn-sm {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+}
+
+/* 右侧设置面板 */
+.bg-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    /* 不设固定高度：面板随内容自然展开，展开高级调整时不出现内部滚动条 */
+}
+
+/* 面板分区：滚动内容 + sticky 底栏 */
+.bg-settings-scroll {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.bg-field-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+}
+
+.bg-field-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* ⓘ 信息图标 + tooltip */
+.bg-info {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    cursor: help;
+    border-radius: 50%;
+    transition: color 0.15s ease;
+}
+
+.bg-info:hover,
+.bg-info:focus-visible {
+    color: var(--accent-color);
+    outline: none;
+}
+
+/* 嵌在按钮内部的 ⓘ：跟随按钮文字颜色、略微弱化 */
+.bg-info-dot {
+    margin-left: 0.35rem;
+    vertical-align: -2px;
+    opacity: 0.7;
+    color: inherit;
+    cursor: help;
+}
+
+.bg-seg-btn .bg-info-dot,
+.bg-preview-btn .bg-info-dot {
+    color: inherit;
+}
+
+.bg-tooltip {
+    position: absolute;
+    z-index: 2000;
+    max-width: 260px;
+    padding: 0.6rem 0.75rem;
+    background: #1d1d1f;
+    color: #f5f5f7;
+    font-size: 0.75rem;
+    line-height: 1.55;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-md);
+    white-space: pre-wrap;
+    pointer-events: none;
+}
+
+/* 高级调整折叠：现代卡片式设计 */
+.bg-advanced-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    margin-top: 0.75rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.bg-advanced-toggle:hover {
+    border-color: var(--accent-color);
+    background: var(--bg-card);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.bg-adv-toggle-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, var(--accent-color), #6c5ce7);
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.bg-adv-toggle-text {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.bg-adv-toggle-sub {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-left: auto;
+}
+
+.bg-adv-arrow {
+    flex-shrink: 0;
+    color: var(--text-muted);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bg-advanced-toggle:hover .bg-adv-arrow {
+    color: var(--accent-color);
+}
+
+/* 展开时：底角拉直，与下方内容卡片拼接；蓝色边框包裹整张卡片 */
+.bg-advanced-toggle.open {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-color: var(--accent-color);
+    border-bottom-color: transparent;
+    background: var(--bg-card);
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.bg-advanced-toggle.open .bg-adv-toggle-icon {
+    background: linear-gradient(135deg, #6c5ce7, var(--accent-color));
+}
+
+.bg-advanced-toggle.open .bg-adv-arrow {
+    transform: rotate(180deg);
+    color: var(--accent-color);
+}
+
+.bg-advanced {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0.85rem;
+    border: 1px solid var(--accent-color);
+    border-top: none;
+    border-bottom-left-radius: var(--radius-sm);
+    border-bottom-right-radius: var(--radius-sm);
+    background: var(--bg-card);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.bg-advanced.collapsed {
+    display: none;
+}
+
+/* 展开时负 margin 抵消 flex gap */
+.bg-advanced-toggle.open + .bg-advanced {
+    margin-top: -0.5rem;
+}
+
+/* 高级调整内部区块 */
+.bg-adv-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.bg-adv-section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.bg-adv-section-title {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* 框选模式网格：单行紧凑按钮（图标 + 名称 + ⓘ），说明走 tooltip */
+.bg-adv-mode-grid {
+    display: grid;
+    /* minmax(0, 1fr) 让轨道可收缩到小于按钮 min-content，避免窄面板下溢出 */
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0.5rem;
+}
+
+.bg-adv-mode-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.6rem;
+    border: 1.5px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    /* 允许作为 grid item 收缩并裁剪内部内容 */
+    min-width: 0;
+    overflow: hidden;
+}
+
+.bg-adv-mode-btn:hover {
+    border-color: var(--accent-color);
+    background: var(--bg-card);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.bg-adv-mode-btn.active {
+    border-color: var(--accent-color);
+    background: rgba(0, 113, 227, 0.06);
+    color: var(--accent-color);
+    box-shadow: 0 0 0 1px var(--accent-color);
+}
+
+.bg-adv-mode-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.bg-protect-color {
+    background: rgba(240, 192, 64, 0.12);
+    color: #d4a017;
+}
+
+.bg-subject-color {
+    background: rgba(74, 158, 255, 0.12);
+    color: #4a9eff;
+}
+
+/* 模式按钮内的 ⓘ 不参与收缩，保持圆形，靠右对齐 */
+.bg-adv-mode-btn .bg-info-dot {
+    flex-shrink: 0;
+    margin-left: auto;
+    padding-left: 0.25rem;
+}
+
+.bg-adv-mode-name {
+    font-weight: 600;
+    font-size: 0.8125rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+}
+
+/* 提示文字 */
+.bg-adv-hint {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.7188rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+    margin: 0;
+    padding: 0.55rem 0.65rem;
+    background: var(--bg-primary);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+}
+
+.bg-adv-hint svg {
+    flex-shrink: 0;
+    margin-top: 1px;
+    color: var(--accent-color);
+}
+
+/* 分隔线 */
+.bg-adv-divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: 0.6rem 0;
+}
+
+/* 边缘精修开关 */
+.bg-adv-check {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    padding: 0.6rem 0.7rem;
+    border-radius: var(--radius-sm);
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.bg-adv-check:hover {
+    border-color: var(--accent-color);
+    background: var(--bg-card);
+}
+
+.bg-adv-check-left {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.bg-adv-check-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(108, 92, 231, 0.1);
+    color: #6c5ce7;
+    flex-shrink: 0;
+}
+
+.bg-adv-check-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+}
+
+.bg-adv-check-name {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.bg-adv-check-desc {
+    font-size: 0.6875rem;
+    color: var(--text-muted);
+}
+
+/* 开关样式 */
+.bg-adv-switch {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.bg-adv-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.bg-adv-switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--border-color);
+    border-radius: 24px;
+    transition: all 0.25s ease;
+}
+
+.bg-adv-switch-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: all 0.25s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.bg-adv-switch input:checked + .bg-adv-switch-slider {
+    background: var(--accent-color);
+}
+
+.bg-adv-switch input:checked + .bg-adv-switch-slider:before {
+    transform: translateX(20px);
+}
+
+/* 框计数栏 - 紧凑单行工具栏 */
+.bg-box-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+    padding: 0.35rem 0.6rem;
+    background: var(--bg-primary);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    min-height: 36px;
+}
+
+.bg-box-counts {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.bg-box-count-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    padding: 0;
+    background: transparent;
+}
+
+.bg-box-count-item b {
+    font-weight: 700;
+    font-size: 0.8125rem;
+}
+
+.bg-box-count-item.bg-subject-color {
+    color: #4a9eff;
+}
+
+.bg-box-count-item.bg-subject-color b {
+    color: #4a9eff;
+}
+
+.bg-box-count-item.bg-protect-color {
+    color: #d4a017;
+}
+
+.bg-box-count-item.bg-protect-color b {
+    color: #d4a017;
+}
+
+/* SAM 操作栏 */
+.bg-sam-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--accent-color);
+    border-radius: var(--radius-sm);
+    background: rgba(74, 158, 255, 0.08);
+}
+
+.bg-select {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+.bg-field-hint {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* 分段切换（保护框 / 主体框） */
+.bg-seg {
+    display: flex;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.bg-seg-btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border: none;
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.bg-seg-btn.active {
+    background: var(--accent-color);
+    color: #fff;
+}
+
+.bg-counts {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+}
+
+.bg-box-actions {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+}
+
+/* 图标按钮（删除/清空） */
+.bg-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    padding: 0;
+    position: relative;
+}
+
+.bg-icon-btn:hover {
+    transform: scale(1.08);
+}
+
+.bg-icon-btn:active {
+    transform: scale(0.93);
+}
+
+.bg-icon-btn.danger {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.bg-icon-btn.danger:hover {
+    background: #fecaca;
+}
+
+.bg-icon-btn.secondary {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+.bg-icon-btn.secondary:hover {
+    background: #e5e7eb;
+}
+
+[data-theme="dark"] .bg-icon-btn.danger {
+    background: rgba(220, 38, 38, 0.2);
+    color: #f87171;
+}
+
+[data-theme="dark"] .bg-icon-btn.danger:hover {
+    background: rgba(220, 38, 38, 0.3);
+}
+
+[data-theme="dark"] .bg-icon-btn.secondary {
+    background: rgba(107, 114, 128, 0.2);
+    color: #9ca3af;
+}
+
+[data-theme="dark"] .bg-icon-btn.secondary:hover {
+    background: rgba(107, 114, 128, 0.3);
+}
+
+/* 保留旧的 link-btn 样式兼容 */
+.bg-link-btn {
+    background: none;
+    border: none;
+    color: var(--accent-color);
+    font-size: 0.8125rem;
+    cursor: pointer;
+    padding: 0.25rem 0;
+}
+
+.bg-link-btn.danger {
+    color: #e53e3e;
+}
+
+.bg-check {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    margin-top: 0.5rem;
+}
+
+/* 进度条 */
+.bg-progress {
+    margin-top: 0.5rem;
+}
+
+.bg-progress-bar {
+    height: 6px;
+    background: var(--border-color);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 0.35rem;
+}
+
+.bg-progress-fill {
+    height: 100%;
+    width: 0;
+    background: var(--accent-color);
+    transition: width 0.2s ease;
+}
+
+/* 底部操作栏：面板不再内部滚动，静态排在内容末尾即可 */
+.bg-settings-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    background: var(--bg-card);
+}
+
+.bg-settings-actions .tool-btn {
+    justify-content: center;
+}
+
+.bg-preview-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 结果预览 */
+.bg-result {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.bg-result-title {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: var(--text-secondary);
+}
+
+.bg-result-canvas {
+    display: inline-block;
+    max-width: 100%;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+
+.bg-result-canvas canvas {
+    max-width: 100%;
+    max-height: 480px;
+    display: block;
+}
+
+/* 透明棋盘格背景 */
+.checker {
+    background-image:
+        linear-gradient(45deg, #ccc 25%, transparent 25%),
+        linear-gradient(-45deg, #ccc 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #ccc 75%),
+        linear-gradient(-45deg, transparent 75%, #ccc 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+    background-color: #fff;
+}
+
+[data-theme="dark"] .checker {
+    background-image:
+        linear-gradient(45deg, #444 25%, transparent 25%),
+        linear-gradient(-45deg, #444 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #444 75%),
+        linear-gradient(-45deg, transparent 75%, #444 75%);
+    background-color: #2a2a2a;
+}
+
+/* 窄屏堆叠 */
+@media (max-width: 768px) {
+    .bg-editor {
+        grid-template-columns: 1fr;
+    }
+    .bg-canvas-stage {
+        height: 360px;
+    }
+}
+
+/* ========================================
     工具类
    ======================================== */
 .hidden {
