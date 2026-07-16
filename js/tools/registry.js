@@ -11,11 +11,4 @@ window.__toolRegistry = [
         desc: '上传图片，本地 AI 去背景，全程不上传',
         loader: () => import('./bg-remove.js')
     },
-    {
-        id: 'sam-poc',
-        name: 'SAM 框选分割（POC）',
-        icon: '🎯',
-        desc: '可行性验证：框/点选自动识别物体，本地运行',
-        loader: () => import('./sam-poc.js')
-    }
 ];

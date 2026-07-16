@@ -187,7 +187,7 @@ export function mount(container) {
                             自动去背${infoDot('imgly 整图去背，发丝/边缘好。')}
                         </button>
                         <button class="bg-seg-btn" data-source="sam">
-                            精准选取${infoDot('框选或点选物体，SAM 精确贴合物体轮廓。首次需额外下载模型。')}
+                            精准选取${infoDot('框选或点选物体，SAM 精确贴合物体轮廓。')}
                         </button>
                     </div>
 
@@ -308,7 +308,9 @@ export function mount(container) {
                 <div class="bg-settings-actions">
                     <button class="tool-btn" id="reselectBtn">重新选择</button>
                     <button class="tool-btn tool-btn-primary bg-preview-btn" id="previewBtn">
-                        预览抠图${infoDot('抠图无法 100% 精确抠出所有细节（发丝、半透明边缘等）。')}
+                        <span class="bg-preview-wrapper">
+                            <span class="bg-preview-text">预览抠图</span>${infoDot('抠图无法 100% 精确抠出所有细节（发丝、半透明边缘等）。')}
+                        </span>
                     </button>
                     <a class="tool-btn tool-btn-primary hidden" id="downloadBtn" download="bg-removed.png">下载 PNG</a>
                 </div>
@@ -664,7 +666,7 @@ async function runForeground(container, img, model) {
         output: { format: 'image/png' }, // 默认 foreground
         progress: (key, current, total) => {
             const pct = total ? Math.round((current / total) * 100) : 0;
-            const label = key && key.includes('fetch') ? '下载模型中…' : '处理中…';
+            const label = key && key.includes('fetch') ? '模型启动中…' : '图片处理中…';
             showProgress(container, true, pct, `${label} ${pct}%`);
         }
     });

@@ -2250,6 +2250,22 @@ body {
     justify-content: center;
 }
 
+.bg-preview-wrapper {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+}
+
+.bg-preview-text {
+    text-align: center;
+}
+
+.bg-preview-wrapper .bg-info-dot {
+    position: absolute;
+    right: -1.25rem;
+    margin-left: 0;
+}
+
 /* 结果预览 */
 .bg-result {
     margin-top: 1.5rem;
