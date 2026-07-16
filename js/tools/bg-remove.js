@@ -149,6 +149,23 @@ export function mount(container) {
                                 <path d="M7 18a5 5 0 0 1 10 0"/>
                             </svg>
                         </button>
+                        <button class="bg-tool tool-polygon bg-tool-box" data-tool="polygon" title="多边形保护框：依次点击描轮廓，双击或点回起点闭合（Enter 闭合 / Esc 取消）" aria-label="画多边形保护框">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 3l7 5-2.5 8.5h-9L5 8z"/>
+                                <circle cx="12" cy="3" r="1.5" fill="currentColor"/>
+                                <circle cx="19" cy="8" r="1.5" fill="currentColor"/>
+                                <circle cx="16.5" cy="16.5" r="1.5" fill="currentColor"/>
+                                <circle cx="7.5" cy="16.5" r="1.5" fill="currentColor"/>
+                                <circle cx="5" cy="8" r="1.5" fill="currentColor"/>
+                            </svg>
+                        </button>
+                        <button class="bg-tool tool-polygon-subject bg-tool-box" data-tool="polygon-subject" title="多边形主体框：依次点击描轮廓，只保留多边形内主体（双击/Enter 闭合 · Esc 取消）" aria-label="画多边形主体框">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 3l7 5-2.5 8.5h-9L5 8z"/>
+                                <circle cx="12" cy="10" r="1.8"/>
+                                <path d="M8.8 15.5a3.2 3.2 0 0 1 6.4 0"/>
+                            </svg>
+                        </button>
                         <button class="bg-tool tool-sam bg-tool-sam hidden" data-tool="sam" title="精准选取：点选或框选物体，SAM 自动识别" aria-label="精准选取">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="3"/>
@@ -419,7 +436,8 @@ function initEditor(container) {
     function setTool(tool) {
         editor.setTool(tool, false); // 不触发 onToolChange，避免打转
         syncToolUI(tool);
-        if (tool === 'protect' || tool === 'subject') setAdvExpanded(true);
+        if (tool === 'protect' || tool === 'subject' ||
+            tool === 'polygon' || tool === 'polygon-subject') setAdvExpanded(true);
     }
 
     canvasTools.addEventListener('click', (e) => {
@@ -430,7 +448,7 @@ function initEditor(container) {
     // 根据选区来源联动所有相关 UI：工具条按钮显隐、SAM 提示、框选模式区、面板标题
     function applySourceUI(source) {
         const isSam = source === 'sam';
-        // 画布工具条：SAM 模式隐藏画框按钮、显示 SAM 按钮；反之亦然
+        // 画布工具条：SAM 模式隐藏画框按钮、显示 SAM 按钮；imgly 模式显示画框
         canvasTools.querySelectorAll('.bg-tool-box').forEach(b => b.classList.toggle('hidden', isSam));
         canvasTools.querySelector('.bg-tool-sam').classList.toggle('hidden', !isSam);
         // SAM 提示与候选栏
@@ -445,6 +463,9 @@ function initEditor(container) {
 
     // tooltip 定位：悬停/聚焦时按视口边界智能摆放
     initTooltips(container);
+
+    // 初始化 UI 状态（显示 imgly 模式的工具按钮）
+    applySourceUI('imgly');
 
     // ---------- 上传 ----------
     uploadArea.addEventListener('click', () => fileInput.click());
@@ -477,9 +498,7 @@ function initEditor(container) {
             bgEditor.classList.remove('hidden');
             $('#downloadBtn').classList.add('hidden');
 
-            // 横向（宽）图片切上下布局：图在上、设置在下，让横图显示更大
-            const isLandscape = image.naturalWidth > image.naturalHeight;
-            bgEditor.classList.toggle('landscape', isLandscape);
+            // 统一采用左图右设置布局（横图/竖图一致），实测比上下布局更好用
 
             // 编辑器需要能拿到尺寸，等一帧让 flex 布局定好再 setImage
             requestAnimationFrame(() => editor.setImage(image));
@@ -814,6 +833,7 @@ function applySamCandidate(state, container) {
 
 // SAM 交互处理：CanvasEditor 在 'sam' 工具模式下的回调
 async function handleSamInteract(evt, state, container) {
+    // sam 模式：sam 来源 + 已编码
     if (state.source !== 'sam' || !state.samEncoded) return;
 
     if (evt.type === 'start') {
@@ -876,6 +896,8 @@ async function runSamDecode(state, container, prompt) {
         const result = await samDecode(state.samEncoded, scaledPrompt);
         state.samCandidates = result.candidates;
         state.samCandIdx = result.bestIdx;
+
+        // 显示候选
         applySamCandidate(state, container);
         showProgress(container, false);
         container.querySelector('#samBar').classList.remove('hidden');

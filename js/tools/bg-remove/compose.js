@@ -41,7 +41,7 @@ export function composeResult(fgData, srcData, boxes, options = {}) {
     const subjectBoxes = boxes.filter(b => b.type === 'subject');
     if (subjectBoxes.length > 0) {
         const keep = new Uint8Array(w * h);
-        for (const b of subjectBoxes) markBox(keep, w, h, b, 1);
+        for (const b of subjectBoxes) markRegion(keep, w, h, b, 1);
         for (let i = 0; i < w * h; i++) {
             if (keep[i] === 0) alpha[i] = 0;
         }
@@ -51,7 +51,7 @@ export function composeResult(fgData, srcData, boxes, options = {}) {
     //    （foreground 在被切掉处的 RGB 可能是透明黑，直接留会发黑边）
     const protectBoxes = boxes.filter(b => b.type === 'protect');
     for (const b of protectBoxes) {
-        restoreBox(outData, src, alpha, w, h, b);
+        restoreRegion(outData, src, alpha, w, h, b);
     }
 
     // 3. 边缘精修：收缩 1px 去白边，再羽化柔化锯齿
@@ -90,6 +90,75 @@ function markBox(arr, w, h, box, value) {
         const row = y * w;
         for (let x = x0; x < x1; x++) {
             arr[row + x] = value;
+        }
+    }
+}
+
+// ---------- 区域分发：矩形走 box 版，多边形走 poly 版 ----------
+
+// 恢复区域：RGB 用原图、alpha 拉满（保护框/保护多边形通用）
+function restoreRegion(outData, src, alpha, w, h, region) {
+    if (region.shape === 'polygon') restorePoly(outData, src, alpha, w, h, region);
+    else restoreBox(outData, src, alpha, w, h, region);
+}
+
+// 标记区域为 value（主体框/主体多边形通用）
+function markRegion(arr, w, h, region, value) {
+    if (region.shape === 'polygon') markPoly(arr, w, h, region, value);
+    else markBox(arr, w, h, region, value);
+}
+
+// 多边形保护：多边形内 RGB 用原图恢复、alpha 拉满
+function restorePoly(outData, src, alpha, w, h, poly) {
+    forEachPixelInPoly(poly.points, w, h, (i) => {
+        const p = i * 4;
+        outData[p] = src[p];
+        outData[p + 1] = src[p + 1];
+        outData[p + 2] = src[p + 2];
+        alpha[i] = 255;
+    });
+}
+
+// 多边形标记：多边形内置为 value
+function markPoly(arr, w, h, poly, value) {
+    forEachPixelInPoly(poly.points, w, h, (i) => { arr[i] = value; });
+}
+
+// 扫描线填充：遍历多边形内所有像素，对每个像素索引 i 调 cb(i)
+// points 为原图像素坐标 [{x,y},...]，与图像尺寸一致
+function forEachPixelInPoly(points, w, h, cb) {
+    const n = points.length;
+    if (n < 3) return;
+
+    // 计算 y 范围并裁剪到图像内
+    let minY = Infinity, maxY = -Infinity;
+    for (const pt of points) {
+        if (pt.y < minY) minY = pt.y;
+        if (pt.y > maxY) maxY = pt.y;
+    }
+    const y0 = Math.max(0, Math.ceil(minY));
+    const y1 = Math.min(h - 1, Math.floor(maxY));
+
+    for (let y = y0; y <= y1; y++) {
+        // 求该扫描线与各边的交点 x
+        const xs = [];
+        for (let i = 0, j = n - 1; i < n; j = i++) {
+            const yi = points[i].y, yj = points[j].y;
+            const xi = points[i].x, xj = points[j].x;
+            // 边跨过当前扫描线（半开区间避免顶点重复计数）
+            if ((yi > y) !== (yj > y)) {
+                const t = (y - yi) / (yj - yi);
+                xs.push(xi + t * (xj - xi));
+            }
+        }
+        if (xs.length < 2) continue;
+        xs.sort((a, b) => a - b);
+        // 交点成对，区间内填充
+        for (let k = 0; k + 1 < xs.length; k += 2) {
+            let xa = Math.max(0, Math.ceil(xs[k]));
+            let xb = Math.min(w - 1, Math.floor(xs[k + 1]));
+            const row = y * w;
+            for (let x = xa; x <= xb; x++) cb(row + x);
         }
     }
 }
@@ -213,7 +282,7 @@ export function composeFromSamMask(samMask, srcData, boxes, options = {}) {
     const subjectBoxes = boxes.filter(b => b.type === 'subject');
     if (subjectBoxes.length > 0) {
         const keep = new Uint8Array(w * h);
-        for (const b of subjectBoxes) markBox(keep, w, h, b, 1);
+        for (const b of subjectBoxes) markRegion(keep, w, h, b, 1);
         for (let i = 0; i < w * h; i++) {
             if (keep[i] === 0) alpha[i] = 0;
         }
@@ -222,7 +291,7 @@ export function composeFromSamMask(samMask, srcData, boxes, options = {}) {
     // 2. 保护框：框内 alpha 拉满，且 RGB 用原图恢复
     const protectBoxes = boxes.filter(b => b.type === 'protect');
     for (const b of protectBoxes) {
-        restoreBox(outData, src, alpha, w, h, b);
+        restoreRegion(outData, src, alpha, w, h, b);
     }
 
     // 3. 边缘精修：收缩 1px 去白边，再羽化柔化锯齿

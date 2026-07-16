@@ -1430,24 +1430,6 @@ body {
     align-items: start;
 }
 
-/* 横向（宽）图片：改为上下布局，图在上、设置在下，让横图显示更大 */
-.bg-editor.landscape {
-    grid-template-columns: 1fr;
-}
-.bg-editor.landscape .bg-settings {
-    max-height: none;      /* 放开高度限制，设置区自然铺开在图片下方 */
-    overflow-y: visible;
-}
-/* 上下布局时底部操作栏横向排列，节省垂直空间 */
-.bg-editor.landscape .bg-settings-actions {
-    flex-direction: row;
-    flex-wrap: wrap;
-}
-.bg-editor.landscape .bg-settings-actions .tool-btn {
-    flex: 1;
-    min-width: 140px;
-}
-
 .bg-canvas-wrap {
     display: flex;
     flex-direction: column;
@@ -1522,6 +1504,8 @@ body {
 /* 画框工具高亮时用各自的框体色，呼应画布上的框 */
 .bg-tool.tool-protect.active { background: #f0c040; color: #3a2e00; }
 .bg-tool.tool-subject.active { background: #4a9eff; color: #fff; }
+.bg-tool.tool-polygon.active { background: #f0c040; color: #3a2e00; }
+.bg-tool.tool-polygon-subject.active { background: #4a9eff; color: #fff; }
 
 /* ===== SAM 框选分割 POC ===== */
 .sam-editor {
