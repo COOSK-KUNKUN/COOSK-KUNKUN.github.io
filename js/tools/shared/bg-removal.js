@@ -6,7 +6,7 @@
 
 // 注意：库版本必须与 @imgly/background-removal-data 数据包版本一致
 // 数据包最新只到 1.4.5，所以库也用 1.4.5
-const IMGLY_CDN = 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/+esm';
+const IMGLY_CDN = 'https://esm.sh/@imgly/background-removal@1.4.5';
 const MAX_DIM = 2048; // 最长边超过则降采样，防止大图爆内存
 
 // 模型改为同源自托管（repo 内 models/imgly/ 目录）：
@@ -36,7 +36,7 @@ export async function ensureLibLoaded() {
 /**
  * 运行去背景，返回 foreground ImageData（RGBA，alpha 即透明通道）
  * @param {HTMLImageElement|HTMLCanvasElement} img - 输入图像
- * @param {string} model - 模型名称：'isnet' | 'isnet_fp16' | 'isnet_quint8'
+ * @param {string} model - 模型名称：'small' | 'medium'
  * @param {Function} onProgress - 进度回调 (pct, text) => void
  * @returns {Promise<ImageData>} 与原图同尺寸的 foreground ImageData
  */

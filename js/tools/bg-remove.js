@@ -176,9 +176,8 @@ export function mount(container) {
                         ${infoIcon('换模型会重新运行 AI，深色区表现各有差异。fp16 精度更高体积更大，quint8 更快更小。')}
                     </div>
                     <select class="bg-select" id="modelSelect">
-                        <option value="isnet">通用（默认）</option>
-                        <option value="isnet_fp16">高精度（fp16，较大）</option>
-                        <option value="isnet_quint8">快速小体积（quint8）</option>
+                        <option value="small">通用（默认）</option>
+                        <option value="medium">高精度（较大）</option>
                     </select>
 
                     <!-- 选区来源：imgly 自动 / SAM 指定 -->
