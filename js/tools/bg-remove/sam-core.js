@@ -13,7 +13,28 @@
 
 const TF_CDN = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3/+esm';
 const MODEL_ID = 'Xenova/slimsam-77-uniform';
-const HF_MIRROR = 'https://hf-mirror.com';
+
+// 按运行环境选择模型源：
+// - 本地（localhost / 127.0.0.1 / 局域网 IP / file 协议）：中国网络下 huggingface.co 访问困难，
+//   走 hf-mirror.com 镜像（同源本地页面不受镜像缺失 CORS 头的影响）。
+// - 线上（GitHub Pages 等跨域）：hf-mirror.com 未设置 Access-Control-Allow-Origin，会被 CORS 拦截，
+//   必须走支持 CORS 的官方域名 huggingface.co。
+function resolveRemoteHost() {
+    if (typeof location === 'undefined') return 'https://huggingface.co';
+    const h = location.hostname;
+    const isLocal =
+        location.protocol === 'file:' ||
+        h === 'localhost' ||
+        h === '127.0.0.1' ||
+        h === '::1' ||
+        h === '' ||
+        /^192\.168\./.test(h) ||
+        /^10\./.test(h) ||
+        /^172\.(1[6-9]|2\d|3[01])\./.test(h);
+    return isLocal ? 'https://hf-mirror.com' : 'https://huggingface.co';
+}
+
+const HF_MIRROR = resolveRemoteHost();
 
 // 模块级单例
 let tf = null;
@@ -49,7 +70,7 @@ export async function getSamCore(onProgress = () => {}) {
             }
         };
 
-        console.log('[SAM] device=', device, 'dtype=', dtype);
+        console.log('[SAM] device=', device, 'dtype=', dtype, 'remoteHost=', HF_MIRROR);
         samModel = await SamModel.from_pretrained(MODEL_ID, { dtype, device, progress_callback });
         samProcessor = await AutoProcessor.from_pretrained(MODEL_ID, { progress_callback });
 

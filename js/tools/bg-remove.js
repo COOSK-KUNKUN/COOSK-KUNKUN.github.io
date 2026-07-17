@@ -136,19 +136,6 @@ export function mount(container) {
                                 <path d="M6 12c-.7-.7-1.8-.7-2.5 0s-.7 1.8 0 2.5L7 20a6 6 0 0 0 5 3h1a6 6 0 0 0 6-6v-6"/>
                             </svg>
                         </button>
-                        <button class="bg-tool tool-protect bg-tool-box" data-tool="protect" title="保护框：拖拽画框，框内像素强制保留" aria-label="画保护框">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="3" width="18" height="18" rx="1" stroke-dasharray="4 3"/>
-                                <path d="M12 8v8M8 12h8"/>
-                            </svg>
-                        </button>
-                        <button class="bg-tool tool-subject bg-tool-box" data-tool="subject" title="主体框：拖拽画框，只保留框内主体" aria-label="画主体框">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="3" width="18" height="18" rx="1" stroke-dasharray="4 3"/>
-                                <circle cx="12" cy="9.5" r="2.5"/>
-                                <path d="M7 18a5 5 0 0 1 10 0"/>
-                            </svg>
-                        </button>
                         <button class="bg-tool tool-polygon bg-tool-box" data-tool="polygon" title="多边形保护框：依次点击描轮廓，双击或点回起点闭合（Enter 闭合 / Esc 取消）" aria-label="画多边形保护框">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M12 3l7 5-2.5 8.5h-9L5 8z"/>
@@ -423,21 +410,25 @@ function initEditor(container) {
     // ---------- 工具选择：画布工具条为主入口，右侧分段控件双向同步 ----------
     const canvasTools = $('#canvasTools');
 
+    // 工具映射：多边形工具 ↔ 右侧面板模式按钮
+    const TOOL_TO_MODE = { 'polygon': 'protect', 'polygon-subject': 'subject' };
+    const MODE_TO_TOOL = { 'protect': 'polygon', 'subject': 'polygon-subject' };
+
     // 只更新 UI 高亮，不回写编辑器（供 onToolChange 回调用）
     function syncToolUI(tool) {
         canvasTools.querySelectorAll('.bg-tool').forEach(b =>
             b.classList.toggle('active', b.dataset.tool === tool));
-        // 右侧模式按钮：pan 时都不高亮，画框工具时高亮对应项
+        // 右侧模式按钮：pan 时都不高亮，多边形工具时高亮对应项
+        const mode = TOOL_TO_MODE[tool] || null;
         $('#modeSeg').querySelectorAll('.bg-adv-mode-btn').forEach(b =>
-            b.classList.toggle('active', b.dataset.mode === tool));
+            b.classList.toggle('active', b.dataset.mode === mode));
     }
 
     // 设置工具：更新编辑器 + UI，选画框工具时自动展开高级调整
     function setTool(tool) {
         editor.setTool(tool, false); // 不触发 onToolChange，避免打转
         syncToolUI(tool);
-        if (tool === 'protect' || tool === 'subject' ||
-            tool === 'polygon' || tool === 'polygon-subject') setAdvExpanded(true);
+        if (tool === 'polygon' || tool === 'polygon-subject') setAdvExpanded(true);
     }
 
     canvasTools.addEventListener('click', (e) => {
@@ -512,12 +503,13 @@ function initEditor(container) {
     }
 
     // ---------- 设置面板交互 ----------
-    // 右侧模式按钮：点了就切到对应画框工具（双向同步的另一半）
+    // 右侧模式按钮：点了就切到对应多边形工具（双向同步的另一半）
     const modeSeg = $('#modeSeg');
     modeSeg.addEventListener('click', (e) => {
         const btn = e.target.closest('.bg-adv-mode-btn');
         if (!btn) return;
-        setTool(btn.dataset.mode);
+        const tool = MODE_TO_TOOL[btn.dataset.mode];
+        if (tool) setTool(tool);
     });
 
     $('#delBtn').addEventListener('click', () => editor.deleteSelected());
