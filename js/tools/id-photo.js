@@ -109,8 +109,8 @@ export function mount(container) {
                         <div class="id-photo-field">
                             <label class="id-photo-label" for="modelSelect">AI 模型</label>
                             <select class="id-photo-select" id="modelSelect">
-                                <option value="small">通用（默认）</option>
-                                <option value="medium">高精度（较大）</option>
+                                <option value="medium">高精度（默认）</option>
+                                <option value="small">通用（较快）</option>
                             </select>
                         </div>
                     </details>

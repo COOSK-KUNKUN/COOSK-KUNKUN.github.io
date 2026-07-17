@@ -30,7 +30,7 @@ export const PAPER_SIZES = {
 export const DEFAULT_SETTINGS = {
     sizeId: '1inch',
     bgColorId: 'white',
-    model: 'small',
+    model: 'medium',
 };
 
 /**
