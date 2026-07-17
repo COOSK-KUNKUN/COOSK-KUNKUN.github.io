@@ -14,11 +14,15 @@
 const TF_CDN = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3/+esm';
 const MODEL_ID = 'Xenova/slimsam-77-uniform';
 
-// 统一走 hf-mirror.com：
-// - 中国网络可达（huggingface.co 在本地/线上访客处均会连接超时 ERR_CONNECTION_TIMED_OUT）
-// - 已支持 CORS：resolve 接口的 OPTIONS 预检、config.json、onnx 权重（含 302→206 CDN 跳转）
-//   均返回 Access-Control-Allow-Origin，跨域（GitHub Pages）可正常加载。
-const HF_MIRROR = 'https://hf-mirror.com';
+// 模型改为同源自托管（repo 内 models/ 目录）：
+// 起因：hf-mirror.com 的 CloudFront 对 resolve 接口未按 Vary: Origin 分桶缓存，
+// 会把带 `Access-Control-Allow-Origin: https://hf-mirror.com` 的陈旧响应（Age 达数十天）
+// 投喂给跨域访客，导致 GitHub Pages 上随机命中缓存投毒、被 CORS 拦截（net::ERR_FAILED 200）。
+// 该问题在服务端且间歇性，客户端无法修复。
+// 解法：把模型文件放到自己的域名下，同源加载 → 零 CORS，且 github.io 在中国可达。
+// 目录布局须匹配 transformers.js 本地模型约定：{localModelPath}/{MODEL_ID}/...
+// 用 import.meta.url 推算 models/ 绝对路径，兼容根目录托管、子路径托管与本地开发。
+const LOCAL_MODEL_PATH = new URL('../../../models/', import.meta.url).href;
 
 // 模块级单例
 let tf = null;
@@ -34,8 +38,10 @@ export async function getSamCore(onProgress = () => {}) {
         tf = await import(TF_CDN);
         const { SamModel, AutoProcessor, env } = tf;
 
-        env.allowLocalModels = false;
-        env.remoteHost = HF_MIRROR;
+        // 同源加载本地模型，关闭远程回退（避免再触碰 hf-mirror 的 CORS 缓存问题）
+        env.allowLocalModels = true;
+        env.allowRemoteModels = false;
+        env.localModelPath = LOCAL_MODEL_PATH;
         if (env.backends?.onnx?.wasm) {
             env.backends.onnx.wasm.wasmPaths =
                 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3/dist/';
@@ -54,7 +60,7 @@ export async function getSamCore(onProgress = () => {}) {
             }
         };
 
-        console.log('[SAM] device=', device, 'dtype=', dtype, 'remoteHost=', HF_MIRROR);
+        console.log('[SAM] device=', device, 'dtype=', dtype, 'localModelPath=', LOCAL_MODEL_PATH);
         samModel = await SamModel.from_pretrained(MODEL_ID, { dtype, device, progress_callback });
         samProcessor = await AutoProcessor.from_pretrained(MODEL_ID, { progress_callback });
 
