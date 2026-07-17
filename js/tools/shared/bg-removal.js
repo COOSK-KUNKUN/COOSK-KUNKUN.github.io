@@ -4,8 +4,16 @@
  * 供 bg-remove.js 和 id-photo.js 复用。
  */
 
-const IMGLY_CDN = 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.5/+esm';
+// 注意：库版本必须与 @imgly/background-removal-data 数据包版本一致
+// 数据包最新只到 1.4.5，所以库也用 1.4.5
+const IMGLY_CDN = 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/+esm';
 const MAX_DIM = 2048; // 最长边超过则降采样，防止大图爆内存
+
+// 模型改为同源自托管（repo 内 models/imgly/ 目录）：
+// 起因：staticimgly.com 在中国大陆无法访问（ERR_CONNECTION_CLOSED）
+// 解法：把模型文件放到自己的域名下，同源加载 → 零 CORS，且 github.io 在中国可达。
+// 用 import.meta.url 推算 models/ 绝对路径，兼容根目录托管、子路径托管与本地开发。
+const LOCAL_MODEL_PATH = new URL('../../../models/imgly/dist/', import.meta.url).href;
 
 let removeBackgroundFn = null;
 let loadPromise = null;
@@ -44,6 +52,7 @@ export async function runForeground(img, model, onProgress) {
 
     const fgBlob = await removeBackground(srcBlob, {
         model,
+        publicPath: LOCAL_MODEL_PATH,  // 同源加载本地模型，避免访问 staticimgly.com
         output: { format: 'image/png' },
         progress: (key, current, total) => {
             if (onProgress) {
