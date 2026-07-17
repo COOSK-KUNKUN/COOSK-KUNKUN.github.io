@@ -11,4 +11,11 @@ window.__toolRegistry = [
         desc: '上传图片，本地 AI 去背景，全程不上传',
         loader: () => import('./bg-remove.js')
     },
+    {
+        id: 'id-photo',
+        name: '证件照',
+        icon: '📷',
+        desc: 'AI 去背景，生成标准证件照，支持排版打印',
+        loader: () => import('./id-photo.js')
+    },
 ];
