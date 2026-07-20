@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v1.4.0 - 新增拼豆图纸工具 - COOSK琨琨</title>
+    <meta name="description" content="新增拼豆图纸工具，生成像素图纸与色号清单">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="blog-page">
+    <header class="blog-header">
+        <div class="header-content">
+            <a href="../index.html" class="header-logo">
+                <div class="header-logo-icon">C</div>
+                <span class="header-logo-text">COOSK琨琨</span>
+            </a>
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                    <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                    </svg>
+                    <svg class="moon-icon hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="note-content">
+        <article class="note-article">
+            <header class="note-header">
+                <h1 class="note-title">v1.4.0 - 新增拼豆图纸工具</h1>
+                <div class="note-meta">
+                    <time class="note-date">2026年7月20日</time>
+                </div>
+            </header>
+
+            <div class="note-body changelog-body">
+                <h2>新增功能</h2>
+                <ul>
+                    <li><strong>拼豆图纸</strong> — 上传图片，生成拼豆像素图纸与色号清单</li>
+                    <li>像素化：横向格子数可调，支持主色 / 平均色两种取色模式</li>
+                    <li>色号映射：291 色拼豆色板，Oklab 色彩空间就近匹配，支持多套色号系统</li>
+                    <li>色号统计：按用量列出每种颜色的色块、色号与数量</li>
+                    <li>导出：带色号标注的 PNG 图纸与颜色清单 CSV</li>
+                </ul>
+
+                <h2>优化</h2>
+                <ul>
+                    <li>证件照上传预览体验优化</li>
+                    <li>AI 抠图共享模块重构，自托管模型资源</li>
+                </ul>
+
+                <h2>技术特性</h2>
+                <ul>
+                    <li>全程浏览器本地处理，图片不上传</li>
+                </ul>
+            </div>
+
+            <footer class="note-footer">
+                <a href="../blog.html" class="back-link">&larr; 返回更新记录</a>
+            </footer>
+        </article>
+    </main>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

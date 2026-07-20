@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v1.1.0 - 笔记动态加载与首篇笔记 - COOSK琨琨</title>
+    <meta name="description" content="随手笔记改为动态加载，发布第一篇笔记">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="blog-page">
+    <header class="blog-header">
+        <div class="header-content">
+            <a href="../index.html" class="header-logo">
+                <div class="header-logo-icon">C</div>
+                <span class="header-logo-text">COOSK琨琨</span>
+            </a>
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                    <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                    </svg>
+                    <svg class="moon-icon hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="note-content">
+        <article class="note-article">
+            <header class="note-header">
+                <h1 class="note-title">v1.1.0 - 笔记动态加载与首篇笔记</h1>
+                <div class="note-meta">
+                    <time class="note-date">2026年7月15日</time>
+                </div>
+            </header>
+
+            <div class="note-body changelog-body">
+                <h2>改进</h2>
+                <ul>
+                    <li><strong>随手笔记动态加载</strong> — 笔记内容改为动态读取 notes 目录（notes/index.json），新增笔记无需改动代码</li>
+                    <li>发布第一篇笔记《十年后再启程》</li>
+                    <li>优化随手收集的数据加载逻辑</li>
+                </ul>
+            </div>
+
+            <footer class="note-footer">
+                <a href="../blog.html" class="back-link">&larr; 返回更新记录</a>
+            </footer>
+        </article>
+    </main>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

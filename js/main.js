@@ -116,6 +116,14 @@ function initNav() {
             drillOutOfTool();
         });
     }
+
+    // 绑定更新记录返回按钮
+    const changelogBackBtn = document.getElementById('changelogBackBtn');
+    if (changelogBackBtn) {
+        changelogBackBtn.addEventListener('click', () => {
+            drillOutOfChangelog();
+        });
+    }
 }
 
 function switchView(view) {
@@ -151,6 +159,16 @@ function switchView(view) {
             grid.classList.remove('hidden');
         }
         ensureToolsLoaded();
+    } else if (view === 'changelog') {
+        document.getElementById('changelogView').classList.remove('hidden');
+        const changelogDetailView = document.getElementById('changelogDetailView');
+        const changelogListEl = document.getElementById('changelogList');
+        if (changelogDetailView && !changelogDetailView.classList.contains('hidden')) {
+            changelogDetailView.classList.add('hidden');
+            document.getElementById('changelogDetailContent').innerHTML = '';
+            changelogListEl.classList.remove('hidden');
+        }
+        loadChangelog();
     }
 }
 
@@ -206,6 +224,8 @@ function initSearch() {
                 renderCollectionTree();
             } else if (currentView === 'tools') {
                 renderToolsGrid();
+            } else if (currentView === 'changelog') {
+                renderChangelog();
             }
         }, 300);
     });
@@ -340,6 +360,150 @@ function drillOutOfNote() {
         detailView.classList.add('hidden');
         detailView.classList.remove('drilling-out');
         notesList.classList.remove('hidden');
+    }, 280);
+}
+
+// ========================================
+// 更新记录数据加载
+// ========================================
+let changelogLoaded = false;
+let changelogLoading = false;
+
+async function loadChangelog() {
+    if (changelogLoaded) {
+        renderChangelog();
+        return;
+    }
+    if (changelogLoading) return;
+    changelogLoading = true;
+
+    const changelogList = document.getElementById('changelogList');
+    const emptyState = document.getElementById('changelogEmpty');
+
+    try {
+        const response = await fetch('changelog/index.json');
+        if (!response.ok) throw new Error('加载失败');
+        const changelogs = await response.json();
+        siteData.changelogs = changelogs;
+        changelogLoaded = true;
+        changelogLoading = false;
+        renderChangelog();
+    } catch (error) {
+        changelogLoading = false;
+        if (changelogList) changelogList.classList.add('hidden');
+        if (emptyState) {
+            emptyState.classList.remove('hidden');
+            emptyState.innerHTML = '<p>更新记录加载失败，请刷新重试</p>';
+        }
+    }
+}
+
+// ========================================
+// 渲染更新记录列表
+// ========================================
+function renderChangelog() {
+    const changelogList = document.getElementById('changelogList');
+    const emptyState = document.getElementById('changelogEmpty');
+    if (!changelogList || !emptyState) return;
+
+    let filtered = (siteData.changelogs || []).slice();
+
+    // 按日期倒序，最新的排最前
+    filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    if (searchQuery) {
+        filtered = filtered.filter(c =>
+            (c.version || '').toLowerCase().includes(searchQuery) ||
+            (c.title || '').toLowerCase().includes(searchQuery) ||
+            (c.summary || '').toLowerCase().includes(searchQuery)
+        );
+    }
+
+    if (filtered.length === 0) {
+        changelogList.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        return;
+    }
+
+    changelogList.classList.remove('hidden');
+    emptyState.classList.add('hidden');
+
+    changelogList.innerHTML = filtered.map(item => `
+        <div class="changelog-item" data-changelog-id="${item.id}" style="cursor:pointer;">
+            <div class="changelog-version">${escapeHtml(item.version)}</div>
+            <h3 class="changelog-title">${escapeHtml(item.title)}</h3>
+            <div class="changelog-date">${formatDateFull(item.date)}</div>
+            <p class="changelog-summary">${escapeHtml(item.summary || '')}</p>
+        </div>
+    `).join('');
+
+    changelogList.querySelectorAll('.changelog-item').forEach(card => {
+        card.addEventListener('click', () => {
+            drillIntoChangelog(card.dataset.changelogId);
+        });
+    });
+}
+
+// ========================================
+// 更新记录钻入/钻出
+// ========================================
+async function drillIntoChangelog(id) {
+    const item = (siteData.changelogs || []).find(c => c.id == id);
+    if (!item) return;
+
+    const changelogList = document.getElementById('changelogList');
+    const detailView = document.getElementById('changelogDetailView');
+    const detailContent = document.getElementById('changelogDetailContent');
+
+    detailContent.innerHTML = `
+        <h1 class="detail-title">${escapeHtml(item.title)}</h1>
+        <div class="detail-meta">
+            <span class="detail-date">${formatDateFull(item.date)}</span>
+        </div>
+        <div class="detail-body"><p>加载中...</p></div>
+    `;
+    changelogList.classList.add('hidden');
+    detailView.classList.remove('hidden');
+    detailView.classList.remove('drilling-out');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    try {
+        const response = await fetch(item.url);
+        if (!response.ok) throw new Error('加载失败');
+        const html = await response.text();
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const changelogBody = doc.querySelector('.changelog-body');
+
+        detailContent.innerHTML = `
+            <h1 class="detail-title">${escapeHtml(item.title)}</h1>
+            <div class="detail-meta">
+                <span class="detail-date">${formatDateFull(item.date)}</span>
+            </div>
+            <div class="detail-body">${changelogBody ? changelogBody.innerHTML : '<p>内容为空</p>'}</div>
+        `;
+    } catch (error) {
+        detailContent.innerHTML = `
+            <h1 class="detail-title">${escapeHtml(item.title)}</h1>
+            <div class="detail-meta">
+                <span class="detail-date">${formatDateFull(item.date)}</span>
+            </div>
+            <div class="detail-body"><p>内容加载失败，请刷新重试</p></div>
+        `;
+    }
+}
+
+function drillOutOfChangelog() {
+    const changelogList = document.getElementById('changelogList');
+    const detailView = document.getElementById('changelogDetailView');
+
+    detailView.classList.add('drilling-out');
+
+    setTimeout(() => {
+        detailView.classList.add('hidden');
+        detailView.classList.remove('drilling-out');
+        changelogList.classList.remove('hidden');
     }, 280);
 }
 

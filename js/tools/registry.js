@@ -18,4 +18,11 @@ window.__toolRegistry = [
         desc: 'AI 去背景，生成标准证件照，支持排版打印',
         loader: () => import('./id-photo.js')
     },
+    {
+        id: 'perler-beads',
+        name: '拼豆图纸',
+        icon: '🧩',
+        desc: '上传图片，生成拼豆像素图纸与色号清单，全程本地处理',
+        loader: () => import('./perler-beads.js')
+    },
 ];

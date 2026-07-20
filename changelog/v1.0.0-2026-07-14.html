@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v1.0.0 - 网站初始版本上线 - COOSK琨琨</title>
+    <meta name="description" content="网站初始版本上线，包含基础功能模块">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="blog-page">
+    <header class="blog-header">
+        <div class="header-content">
+            <a href="../index.html" class="header-logo">
+                <div class="header-logo-icon">C</div>
+                <span class="header-logo-text">COOSK琨琨</span>
+            </a>
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                    <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                    </svg>
+                    <svg class="moon-icon hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="note-content">
+        <article class="note-article">
+            <header class="note-header">
+                <h1 class="note-title">v1.0.0 - 网站初始版本上线</h1>
+                <div class="note-meta">
+                    <time class="note-date">2026年7月14日</time>
+                </div>
+            </header>
+
+            <div class="note-body changelog-body">
+                <h2>初始功能</h2>
+                <ul>
+                    <li><strong>随手收集</strong> — 树形收藏夹，支持分类管理与搜索</li>
+                    <li><strong>随手笔记</strong> — 记录想法的笔记模块</li>
+                    <li><strong>更新记录</strong> — 以时间线样式展示版本更新日志</li>
+                    <li>发布第一篇笔记《十年后再启程》</li>
+                </ul>
+
+                <h2>技术特性</h2>
+                <ul>
+                    <li>支持深色/浅色主题切换，自动跟随系统偏好</li>
+                    <li>响应式布局，适配桌面和移动端</li>
+                    <li>纯前端静态站点，无需后端服务</li>
+                </ul>
+            </div>
+
+            <footer class="note-footer">
+                <a href="../blog.html" class="back-link">&larr; 返回更新记录</a>
+            </footer>
+        </article>
+    </main>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>
