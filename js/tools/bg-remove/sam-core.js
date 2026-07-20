@@ -11,7 +11,9 @@
  *   const candidates = await sam.decode(embeddings, rawImage, prompt);
  */
 
-const TF_CDN = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3/+esm';
+// 版本钉死到 3.8.1：ONNX WASM 运行时已本地化到 models/transformers-wasm/（见下方 wasmPaths），
+// 与 JS 库版本必须精确匹配，故不能用浮动的 @3（升级时须同步替换本地 wasm）。
+const TF_CDN = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1/+esm';
 const MODEL_ID = 'Xenova/slimsam-77-uniform';
 
 // 模型改为同源自托管（repo 内 models/ 目录）：
@@ -43,8 +45,10 @@ export async function getSamCore(onProgress = () => {}) {
         env.allowRemoteModels = false;
         env.localModelPath = LOCAL_MODEL_PATH;
         if (env.backends?.onnx?.wasm) {
+            // ONNX WASM 运行时同源自托管（models/transformers-wasm/），避免依赖 jsdelivr。
+            // 必须与 TF_CDN 的 3.8.1 版本匹配，升级 transformers 时须同步替换这批 wasm。
             env.backends.onnx.wasm.wasmPaths =
-                'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3/dist/';
+                new URL('../../../models/transformers-wasm/', import.meta.url).href;
         }
 
         const hasWebGPU = typeof navigator !== 'undefined' && 'gpu' in navigator;

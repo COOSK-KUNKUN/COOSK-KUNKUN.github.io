@@ -10,13 +10,11 @@
 import { CanvasEditor } from './bg-remove/canvas-editor.js';
 import { composeResult, composeFromSamMask } from './bg-remove/compose.js';
 import { getSamCore, encodeImage as samEncode, decodePrompt as samDecode, resizeMask } from './bg-remove/sam-core.js';
+// AI 去背景复用共享模块：同源本地模型（publicPath 指向 models/imgly/dist/），
+// 库版本固定 1.4.5 与数据包匹配，避免各工具各自维护一份 imgly 加载逻辑导致版本分裂。
+import { runForeground, maybeDownscale, imageToData, resetState as resetBgState } from './shared/bg-removal.js';
 
-const IMGLY_CDN = 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.5/+esm';
-const MAX_DIM = 2048; // 最长边超过则降采样，防止大图爆内存
 const SAM_MAX_DIM = 1024; // SAM 编码前降采样尺寸
-
-let removeBackgroundFn = null;
-let loadPromise = null;
 
 // SAM 状态（懒加载，切到 SAM 模式时才初始化）
 let samState = null; // { encoded, samCanvas, candidates, candIdx, maskData, maskW, maskH }
@@ -600,8 +598,9 @@ function initEditor(container) {
                 // 只有 foreground 缺失或模型变了才重跑 AI
                 if (!state.fgData || state.currentModel !== model) {
                     showProgress(container, true, 0, '加载 AI 模型中…');
-                    await ensureLibLoaded();
-                    state.fgData = await runForeground(container, state.img, model);
+                    state.fgData = await runForeground(state.img, model, (pct, text) => {
+                        showProgress(container, true, pct, text);
+                    });
                     state.currentModel = model;
                     showProgress(container, false);
                 }
@@ -660,82 +659,7 @@ function initEditor(container) {
     }
 }
 
-// 向库请求灰度 mask，并转成与原图同尺寸的 ImageData
-// 向库请求 foreground（RGBA，alpha 即抠好的透明通道），转成与原图同尺寸的 ImageData。
-// 这与最初版本用的输出一致，质量由 imgly 保证；框选/精修在其上做后处理。
-async function runForeground(container, img, model) {
-    // 把降采样后的图转成 blob 交给库，确保输出尺寸与 srcData 一致
-    const srcCanvas = document.createElement('canvas');
-    srcCanvas.width = img.naturalWidth;
-    srcCanvas.height = img.naturalHeight;
-    srcCanvas.getContext('2d').drawImage(img, 0, 0);
-    const srcBlob = await new Promise(res => srcCanvas.toBlob(res, 'image/png'));
-
-    const fgBlob = await removeBackgroundFn(srcBlob, {
-        model,
-        output: { format: 'image/png' }, // 默认 foreground
-        progress: (key, current, total) => {
-            const pct = total ? Math.round((current / total) * 100) : 0;
-            const label = key && key.includes('fetch') ? '模型启动中…' : '图片处理中…';
-            showProgress(container, true, pct, `${label} ${pct}%`);
-        }
-    });
-
-    // foreground blob → ImageData（缩放到原图尺寸，防止库返回尺寸不一致）
-    const fgImg = await blobToImage(fgBlob);
-    const fc = document.createElement('canvas');
-    fc.width = img.naturalWidth;
-    fc.height = img.naturalHeight;
-    const fctx = fc.getContext('2d');
-    fctx.drawImage(fgImg, 0, 0, fc.width, fc.height);
-    return fctx.getImageData(0, 0, fc.width, fc.height);
-}
-
-// 最长边超过 MAX_DIM 则等比缩小，返回新的 HTMLImageElement
-function maybeDownscale(img) {
-    const maxSide = Math.max(img.naturalWidth, img.naturalHeight);
-    if (maxSide <= MAX_DIM) return { image: img, downscaled: false };
-
-    const ratio = MAX_DIM / maxSide;
-    const w = Math.round(img.naturalWidth * ratio);
-    const h = Math.round(img.naturalHeight * ratio);
-    const c = document.createElement('canvas');
-    c.width = w; c.height = h;
-    c.getContext('2d').drawImage(img, 0, 0, w, h);
-
-    // 直接把缩小后的 canvas 当作图像使用（drawImage 接受 canvas）
-    return { image: syncImageFromCanvas(c), downscaled: true };
-}
-
-// 从 canvas 造一个尺寸已知、可立即绘制的 image-like（用 canvas 本身即可被 drawImage 接受）
-function syncImageFromCanvas(canvas) {
-    // drawImage 接受 canvas；但 CanvasEditor 依赖 naturalWidth/naturalHeight，
-    // 给 canvas 补上这两个属性即可当作 image 使用
-    Object.defineProperty(canvas, 'naturalWidth', { value: canvas.width, configurable: true });
-    Object.defineProperty(canvas, 'naturalHeight', { value: canvas.height, configurable: true });
-    return canvas;
-}
-
-// 把 image/canvas 画到离屏 canvas 取 ImageData
-function imageToData(img) {
-    const w = img.naturalWidth;
-    const h = img.naturalHeight;
-    const c = document.createElement('canvas');
-    c.width = w; c.height = h;
-    const ctx = c.getContext('2d');
-    ctx.drawImage(img, 0, 0);
-    return ctx.getImageData(0, 0, w, h);
-}
-
-function blobToImage(blob) {
-    return new Promise((resolve, reject) => {
-        const url = trackUrl(URL.createObjectURL(blob));
-        const im = new Image();
-        im.onload = () => resolve(im);
-        im.onerror = reject;
-        im.src = url;
-    });
-}
+// runForeground / maybeDownscale / imageToData 已抽到 ./shared/bg-removal.js 复用（见文件头 import）
 
 // 把合成结果 ImageData 画到结果 canvas 并生成下载链接
 function renderResult(container, imageData) {
@@ -766,16 +690,6 @@ function showProgress(container, show, pct = 0, text = '') {
         container.querySelector('#progressFill').style.width = pct + '%';
         container.querySelector('#progressText').textContent = text;
     }
-}
-
-async function ensureLibLoaded() {
-    if (removeBackgroundFn) return;
-    if (loadPromise) return loadPromise;
-    loadPromise = (async () => {
-        const module = await import(IMGLY_CDN);
-        removeBackgroundFn = module.removeBackground;
-    })();
-    return loadPromise;
 }
 
 // ---------- SAM 相关辅助函数 ----------
@@ -1070,6 +984,5 @@ export function unmount() {
     // 清理可能残留的 tooltip 浮层
     document.querySelectorAll('.bg-tooltip').forEach(el => el.remove());
     revokeAllUrls();
-    removeBackgroundFn = null;
-    loadPromise = null;
+    resetBgState();
 }

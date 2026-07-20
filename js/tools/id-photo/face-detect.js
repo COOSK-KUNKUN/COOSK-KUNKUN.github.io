@@ -9,8 +9,10 @@
 const VISION_VER = '0.10.18';
 const VISION_CDN = `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${VISION_VER}`;
 const WASM_ROOT = `${VISION_CDN}/wasm`;
-// BlazeFace 短距模型，适合证件照这类近距离单人脸
-const MODEL_URL = 'https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite';
+// BlazeFace 短距模型，适合证件照这类近距离单人脸。
+// 改为同源自托管（repo 内 models/mediapipe/）：Google Cloud Storage 在国内不可达，
+// 改用 import.meta.url 推算本地绝对路径，兼容根目录托管、子路径托管与本地开发。
+const MODEL_URL = new URL('../../../models/mediapipe/blaze_face_short_range.tflite', import.meta.url).href;
 
 let detector = null;
 let loadPromise = null;
