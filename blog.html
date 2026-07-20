@@ -49,9 +49,9 @@
             <nav class="main-nav">
                 <ul class="nav-list">
                     <li class="nav-item">
-                        <a href="#" class="nav-link active" data-view="notes">
-                            <span class="nav-icon">📚</span>
-                            <span class="nav-text">随手笔记</span>
+                        <a href="#" class="nav-link active" data-view="tools">
+                            <span class="nav-icon">🧰</span>
+                            <span class="nav-text">小工具箱</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -61,9 +61,9 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link" data-view="tools">
-                            <span class="nav-icon">🧰</span>
-                            <span class="nav-text">小工具箱</span>
+                        <a href="#" class="nav-link" data-view="notes">
+                            <span class="nav-icon">📚</span>
+                            <span class="nav-text">随手笔记</span>
                         </a>
                     </li>
                 </ul>
@@ -73,7 +73,7 @@
         <!-- 内容区域 -->
         <section class="content-area">
             <!-- 随手笔记视图 -->
-            <div class="view-section" id="notesView">
+            <div class="view-section hidden" id="notesView">
                 <!-- 笔记列表 -->
                 <div class="notes-list" id="notesList">
                     <!-- 笔记列表将通过 JS 动态生成 -->
@@ -125,7 +125,7 @@
             </div>
 
             <!-- 工具箱视图 -->
-            <div class="view-section hidden" id="toolsView">
+            <div class="view-section" id="toolsView">
                 <!-- 工具网格（第一层） -->
                 <div class="tools-grid" id="toolsGrid">
                     <!-- JS 动态渲染 -->

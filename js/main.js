@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initSearch();
     initBackToTop();
     loadNotes();
+    // 默认视图是 tools，首次进入时加载工具列表
+    ensureToolsLoaded();
     // collectionTree 懒加载：首次进入"随手收集"视图时才加载 collections.js
 });
 
@@ -86,7 +88,7 @@ function initTheme() {
 // ========================================
 // 左侧导航切换
 // ========================================
-let currentView = 'notes';
+let currentView = 'tools';
 
 function initNav() {
     const navLinks = document.querySelectorAll('.nav-link');
