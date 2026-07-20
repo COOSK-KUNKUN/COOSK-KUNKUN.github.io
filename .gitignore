@@ -1,0 +1,60 @@
+# ========================================
+# Gitgrone - Generated .gitignore file
+# Project type: Web (HTML/CSS/JS)
+# ========================================
+
+# Dependencies
+node_modules/
+bower_components/
+
+# Build output
+dist/
+build/
+.cache/
+
+# Package locks (uncomment if needed)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Python (if used)
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Notes (optional - uncomment if notes should not be committed)
+# notes/
+
+#.kilo
+.kilo/

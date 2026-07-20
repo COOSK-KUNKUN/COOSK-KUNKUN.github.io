@@ -21,6 +21,7 @@ function revokeAllUrls() {
 // 状态
 const state = {
     step: 'upload',      // 'upload' | 'processing' | 'edit' | 'preview' | 'layout'
+    mode: null,          // 'auto'（AI 去背景）| 'manual'（已去背景，直接编辑）
     img: null,           // 原始图像
     fgData: null,        // 去背景后的 ImageData
     sizeId: DEFAULT_SETTINGS.sizeId,
@@ -32,16 +33,51 @@ const state = {
 export function mount(container) {
     container.innerHTML = `
         <h2>📷 证件照制作</h2>
-        <p class="id-photo-desc">上传照片，AI 自动去背景，生成标准证件照。全程本地处理，不上传。</p>
+        <p class="id-photo-desc">上传照片制作标准证件照。可选择 AI 自动去背景，或直接上传已去好背景的照片。AI 去背景第一次加载需要等待约 3 分钟，后续通过浏览器缓存可以快速进入。</p>
 
-        <!-- 步骤 1: 上传 -->
+        <!-- 步骤 1: 上传（双入口） -->
         <div class="id-photo-step" id="stepUpload">
-            <div class="upload-area" id="uploadArea">
-                <div style="font-size: 3rem; margin-bottom: 1rem;">📸</div>
-                <div>点击或拖拽照片到此处</div>
-                <div style="font-size: 0.75rem; margin-top: 0.5rem; opacity: 0.7;">支持 JPG / PNG / WebP</div>
-                <input type="file" id="fileInput" accept="image/*" style="display: none;">
+            <div class="id-photo-upload-cards">
+                <!-- 卡片 A：自动去背景 -->
+                <div class="id-photo-upload-card" id="uploadAuto">
+                    <span class="id-photo-upload-badge">推荐</span>
+                    <div class="id-photo-upload-card-icon">
+                        <svg class="ai-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="2" stroke-dasharray="4 3"/>
+                            <circle cx="24" cy="24" r="12" fill="currentColor" opacity="0.1"/>
+                            <path d="M24 16V32M16 24H32" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                            <circle cx="24" cy="24" r="4" fill="currentColor"/>
+                            <circle cx="36" cy="12" r="3" fill="currentColor" opacity="0.6"/>
+                            <circle cx="12" cy="36" r="3" fill="currentColor" opacity="0.6"/>
+                        </svg>
+                    </div>
+                    <div class="id-photo-upload-card-title">自动去背景</div>
+                    <div class="id-photo-upload-card-desc">上传照片，AI 自动去除背景</div>
+                    <div class="id-photo-format-hint">支持 <code>JPG</code> <code>PNG</code> <code>WebP</code></div>
+                </div>
+                <!-- 卡片 B：已去背景 -->
+                <div class="id-photo-upload-card" id="uploadManual">
+                    <div class="id-photo-upload-card-icon">
+                        <svg class="check-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="8" y="10" width="32" height="28" rx="3" stroke="currentColor" stroke-width="2"/>
+                            <rect x="12" y="14" width="6" height="6" fill="currentColor" opacity="0.15"/>
+                            <rect x="18" y="20" width="6" height="6" fill="currentColor" opacity="0.15"/>
+                            <rect x="24" y="14" width="6" height="6" fill="currentColor" opacity="0.15"/>
+                            <rect x="30" y="20" width="6" height="6" fill="currentColor" opacity="0.15"/>
+                            <rect x="12" y="26" width="6" height="6" fill="currentColor" opacity="0.15"/>
+                            <rect x="24" y="26" width="6" height="6" fill="currentColor" opacity="0.15"/>
+                            <circle cx="36" cy="34" r="8" fill="#34c759"/>
+                            <path d="M32.5 34L35 36.5L39.5 31.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="id-photo-upload-card-title">已有透明底照片</div>
+                    <div class="id-photo-upload-card-desc">跳过 AI 处理，直接进入编辑</div>
+                    <div class="id-photo-format-hint">推荐 <code>PNG</code> <code>WebP</code>（支持透明）</div>
+                </div>
             </div>
+            <div class="id-photo-upload-tips">💡 也可以直接把图片拖拽到对应卡片</div>
+            <input type="file" id="fileInputAuto" accept="image/*" style="display: none;">
+            <input type="file" id="fileInputManual" accept="image/*" style="display: none;">
         </div>
 
         <!-- 步骤 2: 处理中 -->
@@ -199,39 +235,57 @@ function renderSizeList() {
 function initUI(container) {
     const $ = (id) => container.querySelector(id);
 
-    const uploadArea = $('#uploadArea');
-    const fileInput = $('#fileInput');
+    const uploadAuto = $('#uploadAuto');
+    const uploadManual = $('#uploadManual');
+    const fileInputAuto = $('#fileInputAuto');
+    const fileInputManual = $('#fileInputManual');
     const canvas = $('#idPhotoCanvas');
 
     // 创建编辑器
     editor = new IdPhotoEditor(canvas);
 
-    // ========== 上传 ==========
-    uploadArea.addEventListener('click', () => fileInput.click());
-    uploadArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        uploadArea.classList.add('dragover');
-    });
-    uploadArea.addEventListener('dragleave', () => {
-        uploadArea.classList.remove('dragover');
-    });
-    uploadArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        uploadArea.classList.remove('dragover');
-        const file = e.dataTransfer.files[0];
-        if (file && file.type.startsWith('image/')) handleFile(file);
-    });
-    fileInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) handleFile(file);
-    });
+    // ========== 上传（双入口） ==========
+    // 给一张卡片绑定点击 / 拖拽，选中文件后按 mode 分流处理
+    function bindUploadCard(card, input, mode) {
+        card.addEventListener('click', () => input.click());
+        card.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            card.classList.add('dragover');
+        });
+        card.addEventListener('dragleave', () => {
+            card.classList.remove('dragover');
+        });
+        card.addEventListener('drop', (e) => {
+            e.preventDefault();
+            card.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                state.mode = mode;
+                handleFile(file);
+            }
+        });
+        input.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                state.mode = mode;
+                handleFile(file);
+            }
+        });
+    }
+
+    bindUploadCard(uploadAuto, fileInputAuto, 'auto');
+    bindUploadCard(uploadManual, fileInputManual, 'manual');
 
     async function handleFile(file) {
         const url = trackUrl(URL.createObjectURL(file));
         const img = new Image();
         img.onload = () => {
             state.img = img;
-            processImage();
+            if (state.mode === 'manual') {
+                processManual();
+            } else {
+                processImage();
+            }
         };
         img.onerror = () => alert('图片加载失败，请换一张试试');
         img.src = url;
@@ -253,8 +307,6 @@ function initUI(container) {
                 progressFill.style.width = pct + '%';
             });
 
-            state.fgData = fgData;
-
             // 人脸检测（在原始 RGB 图上更准；失败/无脸则降级为手动定位）
             let faceBox = null;
             try {
@@ -265,24 +317,59 @@ function initUI(container) {
             }
 
             // 进入编辑步骤
-            showStep('edit');
-
-            // 获取当前尺寸
-            const size = ID_PHOTO_SIZES.find(s => s.id === state.sizeId);
-            editor.setTargetSize(size.width, size.height);
-            editor.setBgColor(currentBgColor()); // 编辑态实时铺底色
-            editor.setGuide(size.guide || DEFAULT_GUIDE); // 构图参考线
-            // 图像就绪后再自动定位（setImage 异步加载）
-            editor.setImage(fgData, () => {
-                if (faceBox) editor.fitFaceToGuide(faceBox);
-            });
-            updateColorUse();
+            enterEdit(fgData, faceBox);
 
         } catch (err) {
             console.error('处理失败:', err);
             alert('处理失败：' + err.message);
             showStep('upload');
         }
+    }
+
+    // ========== 处理已去背景图像（跳过 AI） ==========
+    async function processManual() {
+        showStep('processing');
+        const progressText = $('#progressText');
+        const progressFill = $('#progressFill');
+        progressText.textContent = '载入图片…';
+        progressFill.style.width = '100%';
+
+        try {
+            // 直接取上传图像的 ImageData，保留 alpha 通道（透明区域即背景）
+            const fgData = imageToData(state.img);
+
+            // 可选人脸检测：在原图上做，帮助自动定位；失败/无脸则降级为手动
+            let faceBox = null;
+            try {
+                progressText.textContent = '识别人脸位置…';
+                faceBox = await detectFace(state.img);
+            } catch (e) {
+                console.warn('人脸检测不可用，降级为手动定位:', e);
+            }
+
+            enterEdit(fgData, faceBox);
+
+        } catch (err) {
+            console.error('处理失败:', err);
+            alert('处理失败：' + err.message);
+            showStep('upload');
+        }
+    }
+
+    // 进入编辑步骤：设置尺寸、底色、参考线并载入图像
+    function enterEdit(fgData, faceBox) {
+        state.fgData = fgData;
+        showStep('edit');
+
+        const size = ID_PHOTO_SIZES.find(s => s.id === state.sizeId);
+        editor.setTargetSize(size.width, size.height);
+        editor.setBgColor(currentBgColor()); // 编辑态实时铺底色
+        editor.setGuide(size.guide || DEFAULT_GUIDE); // 构图参考线
+        // 图像就绪后再自动定位（setImage 异步加载）
+        editor.setImage(fgData, () => {
+            if (faceBox) editor.fitFaceToGuide(faceBox);
+        });
+        updateColorUse();
     }
 
     // ========== 尺寸选择 ==========
@@ -519,6 +606,7 @@ function initUI(container) {
     }
 
     function resetAll() {
+        state.mode = null;
         state.img = null;
         state.fgData = null;
         state.resultBlob = null;
@@ -526,7 +614,8 @@ function initUI(container) {
         state.bgColorId = DEFAULT_SETTINGS.bgColorId;
         state.model = DEFAULT_SETTINGS.model;
         state.customColor = undefined;
-        fileInput.value = '';
+        fileInputAuto.value = '';
+        fileInputManual.value = '';
         // 把控件值同步回默认，避免下次进入时 UI 与 state 不一致
         const modelSel = container.querySelector('#modelSelect');
         if (modelSel) modelSel.value = DEFAULT_SETTINGS.model;

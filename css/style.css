@@ -2321,23 +2321,129 @@ body {
     animation: fadeIn 0.3s ease-out;
 }
 
-/* 上传区域 */
-.id-photo-step .upload-area {
+/* 上传区域（双入口卡片） */
+.id-photo-upload-cards {
+    display: flex;
+    gap: 1rem;
+}
+
+.id-photo-upload-card {
+    flex: 1;
     border: 2px dashed var(--border-color);
     border-radius: var(--radius-md);
-    padding: 3rem 2rem;
+    padding: 2rem 1.5rem;
     text-align: center;
     cursor: pointer;
     transition: var(--transition);
     background: var(--bg-card);
     color: var(--text-secondary);
+    position: relative;
+    overflow: hidden;
 }
 
-.id-photo-step .upload-area:hover,
-.id-photo-step .upload-area.dragover {
+.id-photo-upload-card:hover {
     border-color: var(--accent-color);
     background: rgba(0, 113, 227, 0.05);
     color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.id-photo-upload-card.dragover {
+    border-color: var(--accent-color);
+    background: rgba(0, 113, 227, 0.1);
+    color: var(--accent-color);
+    transform: scale(1.02);
+}
+
+.id-photo-upload-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+    transition: var(--transition);
+}
+
+.id-photo-upload-card-icon .ai-icon {
+    width: 56px;
+    height: 56px;
+    color: var(--accent-color);
+    transition: var(--transition);
+}
+
+.id-photo-upload-card-icon .check-icon {
+    width: 56px;
+    height: 56px;
+    color: #34c759;
+}
+
+.id-photo-upload-card:hover .id-photo-upload-card-icon {
+    transform: scale(1.1);
+}
+
+.id-photo-upload-card:hover .ai-icon {
+    transform: rotate(90deg);
+}
+
+.id-photo-upload-card-title {
+    font-weight: 600;
+    margin: 0.75rem 0 0.25rem;
+    font-size: 1rem;
+    color: var(--text-primary);
+    transition: var(--transition);
+}
+
+.id-photo-upload-card:hover .id-photo-upload-card-title {
+    color: var(--accent-color);
+}
+
+.id-photo-upload-card-desc {
+    font-size: 0.8125rem;
+    opacity: 0.7;
+    color: var(--text-secondary);
+}
+
+.id-photo-upload-badge {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: var(--accent-color);
+    color: #fff;
+    font-size: 0.6875rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 50px;
+    font-weight: 500;
+}
+
+.id-photo-format-hint {
+    margin-top: 0.75rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
+.id-photo-format-hint code {
+    background: var(--bg-primary);
+    padding: 0.125rem 0.375rem;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.6875rem;
+}
+
+.id-photo-upload-tips {
+    margin-top: 1.5rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.8125rem;
+}
+
+@media (max-width: 480px) {
+    .id-photo-upload-cards {
+        flex-direction: column;
+    }
 }
 
 /* 处理中 */
