@@ -6,6 +6,7 @@
 
 const siteData = {
     notes: [],
+    articles: [],
 
     // 收藏数据在进入"随手收集"视图时由 js/collections.js 懒加载填充
     collectionTree: []

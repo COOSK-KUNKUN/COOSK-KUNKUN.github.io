@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "target": "ES2020",
+        "module": "ESNext",
+        "lib": ["ES2020", "DOM", "DOM.Iterable"],
+        "jsx": "react-jsx",
+        "moduleResolution": "bundler",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["./src/*"],
+            "@test/*": ["./test/*"]
+        },
+        "types": ["vitest/globals", "@testing-library/jest-dom", "node"]
+    },
+    "include": ["src", "demo", "test", "items.d.ts", "vite.config.demo.ts", "vitest.config.ts"],
+    "exclude": ["node_modules", "dist", "demo-dist", "coverage"]
+}

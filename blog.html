@@ -67,6 +67,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="#" class="nav-link" data-view="articles">
+                            <span class="nav-icon">💡</span>
+                            <span class="nav-text">灵感仓库</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="#" class="nav-link" data-view="changelog">
                             <span class="nav-icon">📋</span>
                             <span class="nav-text">更新记录</span>
@@ -102,6 +108,30 @@
                     </div>
                     <article class="note-detail-content" id="noteDetailContent">
                         <!-- 笔记内容将通过 JS 动态加载 -->
+                    </article>
+                </div>
+            </div>
+
+            <!-- 灵感仓库视图 -->
+            <div class="view-section hidden" id="articlesView">
+                <div class="articles-list" id="articlesList">
+                </div>
+                <div class="empty-state hidden" id="articlesEmpty">
+                    <div class="empty-icon">💡</div>
+                    <h3 class="empty-title">还没有文章</h3>
+                    <p>灵感仓库空空如也，快去收集灵感吧</p>
+                </div>
+
+                <div class="article-detail-view hidden" id="articleDetailView">
+                    <div class="article-detail-header">
+                        <button class="article-back-btn" id="articleBackBtn" aria-label="返回文章列表">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                            <span>返回</span>
+                        </button>
+                    </div>
+                    <article class="article-detail-content" id="articleDetailContent">
                     </article>
                 </div>
             </div>

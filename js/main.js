@@ -109,6 +109,14 @@ function initNav() {
         });
     }
 
+    // 绑定文章返回按钮
+    const articleBackBtn = document.getElementById('articleBackBtn');
+    if (articleBackBtn) {
+        articleBackBtn.addEventListener('click', () => {
+            drillOutOfArticle();
+        });
+    }
+
     // 绑定工具返回按钮
     const toolBackBtn = document.getElementById('toolBackBtn');
     if (toolBackBtn) {
@@ -140,6 +148,9 @@ function switchView(view) {
     // 显示目标视图
     if (view === 'notes') {
         document.getElementById('notesView').classList.remove('hidden');
+    } else if (view === 'articles') {
+        document.getElementById('articlesView').classList.remove('hidden');
+        loadArticles();
     } else if (view === 'collections') {
         document.getElementById('collectionsView').classList.remove('hidden');
         ensureCollectionsLoaded();
@@ -220,6 +231,8 @@ function initSearch() {
             searchQuery = e.target.value.trim().toLowerCase();
             if (currentView === 'notes') {
                 renderNotes();
+            } else if (currentView === 'articles') {
+                renderArticles();
             } else if (currentView === 'collections') {
                 renderCollectionTree();
             } else if (currentView === 'tools') {
@@ -360,6 +373,161 @@ function drillOutOfNote() {
         detailView.classList.add('hidden');
         detailView.classList.remove('drilling-out');
         notesList.classList.remove('hidden');
+    }, 280);
+}
+
+// ========================================
+// 灵感仓库：数据加载、渲染、钻入/钻出
+// ========================================
+let articlesLoaded = false;
+let articlesLoading = false;
+
+async function loadArticles() {
+    if (articlesLoaded) {
+        renderArticles();
+        return;
+    }
+    if (articlesLoading) return;
+    articlesLoading = true;
+
+    const articlesList = document.getElementById('articlesList');
+    const emptyState = document.getElementById('articlesEmpty');
+
+    try {
+        const response = await fetch('articles/index.json');
+        if (!response.ok) throw new Error('加载失败');
+        const articles = await response.json();
+        siteData.articles = articles;
+        articlesLoaded = true;
+        articlesLoading = false;
+        renderArticles();
+    } catch (error) {
+        articlesLoading = false;
+        if (articlesList) articlesList.classList.add('hidden');
+        if (emptyState) {
+            emptyState.classList.remove('hidden');
+            emptyState.innerHTML = '<p>文章加载失败，请刷新重试</p>';
+        }
+    }
+}
+
+function renderArticles() {
+    const articlesList = document.getElementById('articlesList');
+    const emptyState = document.getElementById('articlesEmpty');
+    if (!articlesList || !emptyState) return;
+
+    let filtered = siteData.articles;
+
+    if (searchQuery) {
+        filtered = filtered.filter(a =>
+            a.title.toLowerCase().includes(searchQuery) ||
+            (a.excerpt || '').toLowerCase().includes(searchQuery)
+        );
+    }
+
+    if (filtered.length === 0) {
+        articlesList.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        return;
+    }
+
+    articlesList.classList.remove('hidden');
+    emptyState.classList.add('hidden');
+
+    articlesList.innerHTML = filtered.map(article => `
+        <div class="article-card" data-article-id="${article.id}" style="cursor:pointer;">
+            <div class="article-header">
+                <div>
+                    <h2 class="article-title">${escapeHtml(article.title)}</h2>
+                </div>
+                <span class="article-date">${formatDate(article.date)}</span>
+            </div>
+            <p class="article-excerpt">${escapeHtml(article.excerpt || '')}</p>
+            ${article.tags && article.tags.length > 0 ? `
+                <div class="article-tags">
+                    ${article.tags.map(tag => `<span class="article-tag">${escapeHtml(tag)}</span>`).join('')}
+                </div>
+            ` : ''}
+        </div>
+    `).join('');
+
+    articlesList.querySelectorAll('.article-card').forEach(card => {
+        card.addEventListener('click', () => {
+            drillIntoArticle(card.dataset.articleId);
+        });
+    });
+}
+
+async function drillIntoArticle(articleId) {
+    const article = siteData.articles.find(a => a.id == articleId);
+    if (!article) return;
+
+    const articlesList = document.getElementById('articlesList');
+    const detailView = document.getElementById('articleDetailView');
+    const detailContent = document.getElementById('articleDetailContent');
+
+    detailContent.innerHTML = `
+        <h1 class="detail-title">${escapeHtml(article.title)}</h1>
+        <div class="detail-meta">
+            <span class="detail-date">${formatDateFull(article.date)}</span>
+        </div>
+        <div class="detail-body"><p>加载中...</p></div>
+    `;
+    articlesList.classList.add('hidden');
+    detailView.classList.remove('hidden');
+    detailView.classList.remove('drilling-out');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    try {
+        const response = await fetch(article.url);
+        if (!response.ok) throw new Error('加载失败');
+        const html = await response.text();
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const articleBody = doc.querySelector('.article-body');
+        const articleTitle = doc.querySelector('.article-title');
+        const articleDate = doc.querySelector('.article-date');
+        const articleTags = doc.querySelectorAll('.article-tag');
+
+        let metaHtml = '';
+        if (articleDate) {
+            metaHtml += `<span class="detail-date">${articleDate.textContent}</span>`;
+        }
+        if (articleTags && articleTags.length > 0) {
+            metaHtml += `<div class="detail-tags">`;
+            articleTags.forEach(tag => {
+                metaHtml += `<span class="detail-tag">${escapeHtml(tag.textContent)}</span>`;
+            });
+            metaHtml += `</div>`;
+        }
+
+        detailContent.innerHTML = `
+            <h1 class="detail-title">${escapeHtml(articleTitle ? articleTitle.textContent : article.title)}</h1>
+            <div class="detail-meta">${metaHtml}</div>
+            <div class="detail-body">${articleBody ? articleBody.innerHTML : '<p>内容为空</p>'}</div>
+        `;
+    } catch (error) {
+        detailContent.innerHTML = `
+            <h1 class="detail-title">${escapeHtml(article.title)}</h1>
+            <div class="detail-meta">
+                <span class="detail-date">${formatDateFull(article.date)}</span>
+            </div>
+            <div class="detail-body"><p>内容加载失败，请刷新重试</p></div>
+        `;
+    }
+}
+
+function drillOutOfArticle() {
+    const articlesList = document.getElementById('articlesList');
+    const detailView = document.getElementById('articleDetailView');
+
+    detailView.classList.add('drilling-out');
+
+    setTimeout(() => {
+        detailView.classList.add('hidden');
+        detailView.classList.remove('drilling-out');
+        articlesList.classList.remove('hidden');
     }, 280);
 }
 
