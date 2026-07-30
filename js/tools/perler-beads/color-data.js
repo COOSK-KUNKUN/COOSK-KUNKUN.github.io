@@ -6,6 +6,37 @@
 
 export const COLOR_SYSTEMS = ["MARD", "COCO", "漫漫", "盼盼", "咪小窝"];
 
+/**
+ * 颜色大类分组 — 按 MARD 色号前缀归类，方便快速选色。
+ * 每个 key 是分组名，value 是该组包含的 MARD 前缀列表。
+ */
+export const COLOR_GROUPS = {
+  "黄色系": ["A", "B24", "B26", "B30", "B31", "B32"],
+  "绿色系": ["B0", "B1", "B2", "B3"],
+  "蓝色系": ["C"],
+  "紫色系": ["D"],
+  "红色系": ["E", "F"],
+  "棕色系": ["G", "M"],
+  "黑白灰": ["H", "P"],
+  "特殊色": ["Q", "R", "Y", "ZG"],
+};
+
+/**
+ * 判断一个 HEX 属于哪个分组（按 MARD 前缀匹配）。
+ * 返回分组名，未匹配则返回 "特殊色"。
+ */
+export function getColorGroup(hex) {
+  const pal = PALETTE[hex];
+  if (!pal) return "特殊色";
+  const mard = pal.MARD || "";
+  for (const [group, prefixes] of Object.entries(COLOR_GROUPS)) {
+    for (const p of prefixes) {
+      if (mard.startsWith(p)) return group;
+    }
+  }
+  return "特殊色";
+}
+
 export const PALETTE = {
   "#FAF4C8": { MARD: "A01", COCO: "E02", "漫漫": "E2", "盼盼": "65", "咪小窝": "77" },
   "#FFFFD5": { MARD: "A02", COCO: "E01", "漫漫": "B1", "盼盼": "2", "咪小窝": "2" },

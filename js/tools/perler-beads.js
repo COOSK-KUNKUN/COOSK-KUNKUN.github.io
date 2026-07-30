@@ -1,12 +1,14 @@
 /**
- * 拼豆图纸生成器
- * 流程：上传图片 → 像素化（Dominant/Average）→ 映射到拼豆色板 → 预览 + 色号统计 → 导出 PNG/CSV
+ * 拼豆图纸生成器 + 编辑器
+ * 流程：选择模式 → 图片生成器（上传图片 → 像素化 → 映射色板 → 预览 + 导出）
+ *                    → 编辑器（手绘/导入CSV → 编辑 → 导出）
  * 纯前端，适配 github.io 静态部署，图片全程本地处理不上传。
  */
 
 import { COLOR_SYSTEMS } from './perler-beads/color-data.js';
 import { calculatePixelGrid, countColors, PixelationMode } from './perler-beads/pixelation.js';
 import { exportGridPng, exportCsv } from './perler-beads/exporter.js';
+import { mountCraft, unmountCraft } from './perler-beads/craft-editor.js';
 
 const MAX_GRID = 150; // 粒度上限（决策 D2：150×150 性能可控）
 const BASE_CELL = 20; // 离屏图纸每格基准像素（色号文字按此绘制）
@@ -51,58 +53,145 @@ let rafPending = false;
 
 // DOM 引用
 let els = {};
+let currentMode = null; // 'generator' | 'editor'
+let containerRef = null;
 
 export function mount(container) {
+    containerRef = container;
+    currentMode = null;
+    renderModeSelect(container);
+}
+
+// ================= 模式选择界面 =================
+function renderModeSelect(container) {
     container.innerHTML = `
-        <h2>🧩 拼豆图纸生成器</h2>
-        <p class="perler-desc">上传图片，自动像素化并映射到拼豆色板，生成带色号的图纸与颜色清单。全程在浏览器本地处理，图片不上传。</p>
-
-        <!-- 上传区 -->
-        <div class="perler-upload" id="perlerUpload">
-            <div class="perler-upload-icon">🖼️</div>
-            <div class="perler-upload-title">点击或拖拽图片到此处</div>
-            <div class="perler-upload-hint">支持 JPG / PNG</div>
-            <input type="file" id="perlerFile" accept="image/*" style="display:none;">
+        <div class="perler-mode-select">
+            <div class="perler-mode-header">
+                <h2 class="perler-mode-title">🧩 拼豆工具</h2>
+                <p class="perler-mode-sub">选择你需要的功能</p>
+            </div>
+            <div class="perler-mode-cards">
+                <button class="perler-mode-card" data-mode="generator">
+                    <div class="perler-mode-icon">🖼️</div>
+                    <h3 class="perler-mode-name">图片生成器</h3>
+                    <p class="perler-mode-desc">上传图片，自动像素化并映射到拼豆色板，生成带色号的图纸与颜色清单</p>
+                </button>
+                <button class="perler-mode-card" data-mode="editor">
+                    <div class="perler-mode-icon">✏️</div>
+                    <h3 class="perler-mode-name">拼豆编辑器</h3>
+                    <p class="perler-mode-desc">从空白画布自由手绘，或导入已有 CSV 图纸继续编辑</p>
+                </button>
+            </div>
         </div>
+    `;
 
-        <!-- 工作区 -->
-        <div class="perler-workspace hidden" id="perlerWorkspace">
-            <div class="perler-toolbar">
-                <div class="perler-field">
-                    <label class="perler-label">粒度（横向格子）<span id="perlerGridVal">50</span></label>
-                    <input type="range" id="perlerGrid" min="10" max="${MAX_GRID}" value="50" class="perler-range">
-                </div>
-                <div class="perler-field">
-                    <label class="perler-label">模式</label>
-                    <select id="perlerMode" class="perler-select">
-                        <option value="dominant">主色（卡通）</option>
-                        <option value="average">平均色（照片）</option>
-                    </select>
-                </div>
-                <div class="perler-field">
-                    <label class="perler-label">色号系统</label>
-                    <select id="perlerSystem" class="perler-select">
-                        ${COLOR_SYSTEMS.map(s => `<option value="${s}">${s}</option>`).join('')}
-                    </select>
-                </div>
-                <div class="perler-field perler-field-check">
-                    <label class="perler-label"><input type="checkbox" id="perlerShowCode" checked> 显示色号</label>
-                </div>
-                <div class="perler-field perler-field-actions">
-                    <button class="tool-btn" id="perlerReupload">重新上传</button>
-                    <button class="tool-btn tool-btn-primary" id="perlerExportPng">导出图纸</button>
-                    <button class="tool-btn" id="perlerExportCsv">导出清单</button>
-                </div>
+    container.querySelectorAll('.perler-mode-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const mode = card.dataset.mode;
+            if (mode === 'generator') {
+                currentMode = 'generator';
+                renderGenerator(container);
+            } else if (mode === 'editor') {
+                currentMode = 'editor';
+                mountCraft(container);
+            }
+        });
+    });
+}
+
+// ================= 图片生成器模式 =================
+function renderGenerator(container) {
+    container.innerHTML = `
+        <div class="perler-generator">
+            <!-- 上传区 -->
+            <div class="perler-upload" id="perlerUpload">
+                <div class="perler-upload-icon">🖼️</div>
+                <div class="perler-upload-title">点击或拖拽图片到此处</div>
+                <div class="perler-upload-hint">支持 JPG / PNG</div>
+                <input type="file" id="perlerFile" accept="image/*" style="display:none;">
             </div>
 
-            <div class="perler-canvas-area" id="perlerCanvasArea">
-                <canvas id="perlerCanvas"></canvas>
-                <div class="perler-tooltip hidden" id="perlerTooltip"></div>
-                <div class="perler-view-hint">拖动平移 · 滚轮缩放</div>
-                <button class="tool-btn tool-btn-sm perler-reset-view" id="perlerResetView">复位</button>
-            </div>
+            <!-- 工作区 -->
+            <div class="perler-workspace hidden" id="perlerWorkspace">
+                <!-- 顶部工具栏 -->
+                <div class="perler-gen-toolbar">
+                    <div class="perler-gen-toolbar-group">
+                        <div class="perler-gen-grid-control">
+                            <div class="perler-gen-grid-label">横向格子数</div>
+                            <div class="perler-gen-grid-value" id="perlerGridVal">50</div>
+                            <input type="range" id="perlerGrid" min="10" max="${MAX_GRID}" value="50" class="perler-gen-range">
+                        </div>
+                        <div class="perler-gen-field">
+                            <div class="perler-gen-field-label">像素化模式</div>
+                            <select id="perlerMode" class="perler-gen-select">
+                                <option value="dominant">主色提取（卡通）</option>
+                                <option value="average">平均色（照片）</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="perler-gen-toolbar-divider"></div>
+                    <div class="perler-gen-toolbar-group">
+                        <div class="perler-gen-field">
+                            <div class="perler-gen-field-label">色号系统</div>
+                            <select id="perlerSystem" class="perler-gen-select">
+                                ${COLOR_SYSTEMS.map(s => `<option value="${s}">${s}</option>`).join('')}
+                            </select>
+                        </div>
+                        <label class="perler-gen-checkbox">
+                            <input type="checkbox" id="perlerShowCode" checked>
+                            <span class="perler-gen-checkbox-mark"></span>
+                            <span>显示色号</span>
+                        </label>
+                    </div>
+                    <div class="perler-gen-toolbar-actions">
+                        <button class="perler-gen-btn-regen" id="perlerRegenerate">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                            重新生成
+                        </button>
+                    </div>
+                </div>
 
-            <div class="perler-stats" id="perlerStats"></div>
+                <!-- 主内容区：画布 + 右侧面板 -->
+                <div class="perler-gen-main">
+                    <div class="perler-gen-canvas-wrap" id="perlerCanvasArea">
+                        <canvas id="perlerCanvas"></canvas>
+                        <div class="perler-gen-canvas-hint">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg>
+                            拖动平移 · 滚轮缩放
+                        </div>
+                        <div class="perler-tooltip hidden" id="perlerTooltip"></div>
+                    </div>
+
+                    <!-- 右侧材料清单面板 -->
+                    <div class="perler-gen-panel">
+                        <div class="perler-gen-panel-header">
+                            <span class="perler-gen-panel-icon"></span>
+                            <span class="perler-gen-panel-title">材料清单</span>
+                        </div>
+                        <div class="perler-gen-panel-stats">
+                            <div class="perler-gen-stat-card">
+                                <div class="perler-gen-stat-num" id="perlerStatColors">0</div>
+                                <div class="perler-gen-stat-label">种颜色</div>
+                            </div>
+                            <div class="perler-gen-stat-card">
+                                <div class="perler-gen-stat-num" id="perlerStatBeads">0</div>
+                                <div class="perler-gen-stat-label">颗豆子</div>
+                            </div>
+                        </div>
+                        <div class="perler-gen-color-list" id="perlerColorList"></div>
+                        <div class="perler-gen-panel-actions">
+                            <button class="perler-gen-btn perler-gen-btn-secondary" id="perlerExportCsv">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                                清单
+                            </button>
+                            <button class="perler-gen-btn perler-gen-btn-primary" id="perlerExportPng">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                导出
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     `;
 
@@ -115,14 +204,15 @@ export function mount(container) {
         mode: container.querySelector('#perlerMode'),
         system: container.querySelector('#perlerSystem'),
         showCode: container.querySelector('#perlerShowCode'),
-        reupload: container.querySelector('#perlerReupload'),
+        regenerate: container.querySelector('#perlerRegenerate'),
         exportPng: container.querySelector('#perlerExportPng'),
         exportCsv: container.querySelector('#perlerExportCsv'),
         canvasArea: container.querySelector('#perlerCanvasArea'),
         canvas: container.querySelector('#perlerCanvas'),
         tooltip: container.querySelector('#perlerTooltip'),
-        resetView: container.querySelector('#perlerResetView'),
-        stats: container.querySelector('#perlerStats'),
+        statColors: container.querySelector('#perlerStatColors'),
+        statBeads: container.querySelector('#perlerStatBeads'),
+        colorList: container.querySelector('#perlerColorList'),
     };
 
     bindEvents();
@@ -148,12 +238,10 @@ function bindEvents() {
     els.grid.addEventListener('input', () => { els.gridVal.textContent = els.grid.value; });
     els.grid.addEventListener('change', () => { state.gridN = parseInt(els.grid.value, 10); regenerate(); });
     els.mode.addEventListener('change', () => { state.mode = els.mode.value; regenerate(); });
-    // 换色号系统 / 开关色号：只需重建色号层，不用重算网格
     els.system.addEventListener('change', () => { state.system = els.system.value; buildCodeLayer(); paint(); renderStats(); });
     els.showCode.addEventListener('change', () => { state.showCode = els.showCode.checked; paint(); });
 
-    els.reupload.addEventListener('click', () => resetToUpload());
-    els.resetView.addEventListener('click', () => { resetView(); paint(); });
+    els.regenerate.addEventListener('click', () => regenerate());
     els.exportPng.addEventListener('click', () => {
         if (state.cells) exportGridPng(state.cells, state.system, { showCode: state.showCode });
     });
@@ -423,18 +511,25 @@ function updateTooltip(e) {
 function renderStats() {
     if (!state.stats) return;
     const total = state.stats.reduce((s, c) => s + c.count, 0);
-    const items = state.stats.map(s => {
+    const N = state.cells[0] ? state.cells[0].length : 0;
+    const M = state.cells.length;
+
+    // 更新统计卡片
+    els.statColors.textContent = state.stats.length;
+    els.statBeads.textContent = total.toLocaleString();
+
+    // 更新颜色列表
+    els.colorList.innerHTML = state.stats.map(s => {
         const code = (s.systems && s.systems[state.system]) || '?';
-        return `<div class="perler-stat-item">
-            <span class="perler-swatch" style="background:${s.hex}"></span>
-            <span class="perler-stat-code">${code}</span>
-            <span class="perler-stat-count">×${s.count}</span>
+        return `<div class="perler-gen-color-item">
+            <div class="perler-gen-color-swatch" style="background-color:${s.hex}"></div>
+            <div class="perler-gen-color-info">
+                <div class="perler-gen-color-code">${code}</div>
+                <div class="perler-gen-color-hex">${s.hex}</div>
+            </div>
+            <div class="perler-gen-color-count">×${s.count}</div>
         </div>`;
     }).join('');
-    els.stats.innerHTML = `
-        <div class="perler-stats-head">共 ${state.stats.length} 种颜色 · ${total} 颗豆子</div>
-        <div class="perler-stats-list">${items}</div>
-    `;
 }
 
 function resetToUpload() {
@@ -463,4 +558,12 @@ export function unmount() {
     state.stats = null;
     view.gridImg = null;
     view.codeImg = null;
+    
+    // 如果当前是编辑器模式，调用编辑器的 unmount
+    if (currentMode === 'editor') {
+        unmountCraft();
+    }
+    
+    currentMode = null;
+    containerRef = null;
 }

@@ -1,0 +1,682 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e4]:
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - generic [ref=e7]:
+          - text: "skip to:"
+          - link "skip to content" [ref=e8] [cursor=pointer]:
+            - /url: "#main"
+            - text: content
+          - link "skip to package search" [ref=e9] [cursor=pointer]:
+            - /url: "#search"
+            - text: package search
+          - link "skip to sign in" [ref=e10] [cursor=pointer]:
+            - /url: "#signin"
+            - text: sign in
+        - generic [ref=e11]:
+          - button "Light mode — click for dark" [ref=e12] [cursor=pointer]:
+            - img [ref=e13]
+          - navigation "Product Navigation" [ref=e15]:
+            - list [ref=e16]:
+              - listitem [ref=e17]:
+                - link "Pro" [ref=e18] [cursor=pointer]:
+                  - /url: /products/pro
+              - listitem [ref=e19]:
+                - link "Teams" [ref=e20] [cursor=pointer]:
+                  - /url: /products/teams
+              - listitem [ref=e21]:
+                - link "Pricing" [ref=e22] [cursor=pointer]:
+                  - /url: /products
+              - listitem [ref=e23]:
+                - link "Documentation" [ref=e24] [cursor=pointer]:
+                  - /url: https://docs.npmjs.com
+      - generic [ref=e26]:
+        - generic [ref=e27]: npm
+        - link "Npm" [ref=e29] [cursor=pointer]:
+          - /url: /
+          - img [ref=e30]
+        - generic [ref=e33]:
+          - generic [ref=e35]:
+            - img [ref=e37]
+            - combobox "Search packages" [ref=e43]
+          - button "Search" [ref=e45]
+        - generic [ref=e47]:
+          - link "Sign Up" [ref=e48] [cursor=pointer]:
+            - /url: /signup
+          - link "Sign In" [ref=e49] [cursor=pointer]:
+            - /url: /login
+    - main [ref=e50]:
+      - generic [ref=e51]:
+        - generic [ref=e52]:
+          - heading "@tarojs/react TypeScript icon, indicating that this package has built-in type declarations" [level=1] [ref=e53]:
+            - generic [ref=e54]: "@tarojs/react"
+            - img "TypeScript icon, indicating that this package has built-in type declarations" [ref=e56]
+          - generic [ref=e57]: 4.2.0 •
+          - generic [ref=e58]: Public
+          - generic [ref=e59]:
+            - text: • Published
+            - time [ref=e60]: 2 days ago
+        - tablist [ref=e61]:
+          - tab "Readme" [selected] [ref=e62] [cursor=pointer]:
+            - generic [ref=e63]:
+              - img [ref=e64]
+              - text: Readme
+          - tab "Code Beta" [ref=e66] [cursor=pointer]:
+            - generic [ref=e67]:
+              - img [ref=e68]
+              - text: Code
+              - generic [ref=e71]: Beta
+          - tab "3 Dependencies" [ref=e72] [cursor=pointer]:
+            - generic [ref=e73]:
+              - img [ref=e74]
+              - text: 3 Dependencies
+          - tab "145 Dependents" [ref=e76] [cursor=pointer]:
+            - generic [ref=e77]:
+              - img [ref=e78]
+              - text: 145 Dependents
+          - tab "848 Versions" [ref=e80] [cursor=pointer]:
+            - generic [ref=e81]:
+              - img [ref=e82]
+              - text: 848 Versions
+        - generic [ref=e85]:
+          - tabpanel "Readme" [ref=e86]:
+            - article [ref=e88]:
+              - generic [ref=e89]:
+                - generic [ref=e90]:
+                  - heading "@tarojs/react" [level=1] [ref=e91]
+                  - 'link "Permalink: @tarojs/react" [ref=e92] [cursor=pointer]':
+                    - /url: "#tarojsreact"
+                - paragraph [ref=e93]:
+                  - text: 基于
+                  - code [ref=e94]: react-reconciler
+                  - text: 的小程序专用 React 渲染器，连接
+                  - code [ref=e95]: "@tarojs/runtime 的 DOM 实例，相当于小程序版的"
+                  - text: react-dom
+                  - code [ref=e96]: ，暴露的 API 也和
+                  - text: "react-dom` 保持一致。"
+                - generic [ref=e97]:
+                  - heading "HostConfig for Taro" [level=2] [ref=e98]
+                  - 'link "Permalink: HostConfig for Taro" [ref=e99] [cursor=pointer]':
+                    - /url: "#hostconfig-for-taro"
+                - paragraph [ref=e100]:
+                  - text: Taro 对 HostConfig 进行了针对性的改造，以适应小程序环境。现对各字段进行阐述，具体实现以文件
+                  - code [ref=e101]: ./src/reconciler.ts
+                  - text: 为准。
+                - paragraph [ref=e102]:
+                  - text: 字段的含义描述来源于
+                  - link "react-reconciler" [ref=e103] [cursor=pointer]:
+                    - /url: https://www.npmjs.com/package/react-reconciler/v/0.27.0
+                - generic [ref=e104]:
+                  - heading "getPublicInstance(instance)" [level=3] [ref=e105]
+                  - 'link "Permalink: getPublicInstance(instance)" [ref=e106] [cursor=pointer]':
+                    - /url: "#getpublicinstanceinstance"
+                - blockquote [ref=e107]:
+                  - paragraph [ref=e108]: Determines what object gets exposed as a ref. If you don't want to do anything here, return instance.
+                - paragraph [ref=e109]: "Taro: 默认返回 instance 即可"
+                - generic [ref=e110]:
+                  - heading "getRootHostContext(rootContainer)" [level=3] [ref=e111]
+                  - 'link "Permalink: getRootHostContext(rootContainer)" [ref=e112] [cursor=pointer]':
+                    - /url: "#getroothostcontextrootcontainer"
+                - blockquote [ref=e113]:
+                  - paragraph [ref=e114]: This method lets you return the initial host context from the root of the tree. If you don't intend to use host context, you can return null.
+                - paragraph [ref=e115]: "Taro: 默认返回 {}"
+                - generic [ref=e116]:
+                  - heading "getChildHostContext(parentHostContext, type, rootContainer)" [level=3] [ref=e117]
+                  - 'link "Permalink: getChildHostContext(parentHostContext, type, rootContainer)" [ref=e118] [cursor=pointer]':
+                    - /url: "#getchildhostcontextparenthostcontext-type-rootcontainer"
+                - blockquote [ref=e119]:
+                  - paragraph [ref=e120]: Host context lets you track some information about where you are in the tree so that it's available inside createInstance as the hostContext parameter.
+                - paragraph [ref=e121]: "Taro: 默认返回 {}"
+                - generic [ref=e122]:
+                  - heading "resetAfterCommit(containerInfo)" [level=3] [ref=e123]
+                  - 'link "Permalink: resetAfterCommit(containerInfo)" [ref=e124] [cursor=pointer]':
+                    - /url: "#resetaftercommitcontainerinfo"
+                - blockquote [ref=e125]:
+                  - paragraph [ref=e126]: This method is called right after React has performed the tree mutations. You can leave it empty.
+                - paragraph [ref=e127]: "Taro: 该方法置空"
+                - generic [ref=e128]:
+                  - heading "prepareForCommit(containerInfo)" [level=3] [ref=e129]
+                  - 'link "Permalink: prepareForCommit(containerInfo)" [ref=e130] [cursor=pointer]':
+                    - /url: "#prepareforcommitcontainerinfo"
+                - blockquote [ref=e131]:
+                  - paragraph [ref=e132]: This method lets you store some information before React starts making changes to the tree on the screen.
+                - paragraph [ref=e133]: "Taro: 返回 null 即可."
+                - generic [ref=e134]:
+                  - heading "createInstance(type, props, rootContainer, hostContext, internalHandle)" [level=3] [ref=e135]
+                  - 'link "Permalink: createInstance(type, props, rootContainer, hostContext, internalHandle)" [ref=e136] [cursor=pointer]':
+                    - /url: "#createinstancetype-props-rootcontainer-hostcontext-internalhandle"
+                - blockquote [ref=e137]:
+                  - paragraph [ref=e138]: This method should return a newly created node. For example, the DOM renderer would call document.createElement(type) here and then set the properties from props.
+                - paragraph [ref=e139]:
+                  - text: "Taro: 在 ReactDOM 中会调用 document.createElement 来生成 dom，而在小程序环境中 Taro 中模拟了 document，直接返回"
+                  - code [ref=e140]: document.createElement(type)
+                  - text: 即可
+                - blockquote [ref=e141]:
+                  - paragraph [ref=e142]: "也因为 Taro 没有使用其他入参，因此方法 getRootHostContext / getChildHostContext 默认返回 {} 即可"
+                - generic [ref=e143]:
+                  - heading "appendInitialChild(parentInstance, child)" [level=3] [ref=e144]
+                  - 'link "Permalink: appendInitialChild(parentInstance, child)" [ref=e145] [cursor=pointer]':
+                    - /url: "#appendinitialchildparentinstance-child"
+                - blockquote [ref=e146]:
+                  - paragraph [ref=e147]: This method should mutate the parentInstance and add the child to its list of children. For example, in the DOM this would translate to a parentInstance.appendChild(child) call.
+                - paragraph [ref=e148]: "Taro: 直接 parentInstance.appendChild(child) 即可"
+                - generic [ref=e149]:
+                  - heading "finalizeInitialChildren(instance, type, props, rootContainer, hostContext)" [level=3] [ref=e150]
+                  - 'link "Permalink: finalizeInitialChildren(instance, type, props, rootContainer, hostContext)" [ref=e151] [cursor=pointer]':
+                    - /url: "#finalizeinitialchildreninstance-type-props-rootcontainer-hostcontext"
+                - blockquote [ref=e152]:
+                  - paragraph [ref=e153]: In this method, you can perform some final mutations on the instance. There is a second purpose to this method. It lets you specify whether there is some work that needs to happen when the node is connected to the tree on the screen. If you return true, the instance will receive a commitMount call later. See its documentation below.
+                - paragraph [ref=e154]: finalizeInitialChildren 在组件挂载到页面中前调用，更新时不会调用.
+                - paragraph [ref=e155]:
+                  - text: "Taro: 遍历 props，更新到 instance 中即可，同时返回false，即不需要调用"
+                  - code [ref=e156]: commitMount
+                  - text: 方法
+                - generic [ref=e157]:
+                  - heading "prepareUpdate(instance, type, oldProps, newProps, rootContainer, hostContext)" [level=4] [ref=e158]
+                  - 'link "Permalink: prepareUpdate(instance, type, oldProps, newProps, rootContainer, hostContext)" [ref=e159] [cursor=pointer]':
+                    - /url: "#prepareupdateinstance-type-oldprops-newprops-rootcontainer-hostcontext"
+                - blockquote [ref=e160]:
+                  - paragraph [ref=e161]: React calls this method so that you can compare the previous and the next props, and decide whether you need to update the underlying instance or not. If you need to update it, you can return an arbitrary object representing the changes that need to happen. Then in commitUpdate you would need to apply those changes to the instance.
+                - paragraph [ref=e162]:
+                  - text: prepareUpdate 的返回结果是
+                  - code [ref=e163]: commitUpdate
+                  - text: 的第二个入参。prepareUpdate 主要作用是render阶段计算出dom的哪些属性需要更新，这样在 commitUpdate 方法在commit阶段中可以快速更新dom，提高性能.
+                - paragraph [ref=e164]:
+                  - text: "Taro: 对比 oldProps、newProps 计算出差异点，返回"
+                  - code [ref=e165]: "[prop1, value1, prop2, value2, ...]"
+                  - text: .
+                - generic [ref=e166]:
+                  - heading "shouldSetTextContent(type, props)" [level=3] [ref=e167]
+                  - 'link "Permalink: shouldSetTextContent(type, props)" [ref=e168] [cursor=pointer]':
+                    - /url: "#shouldsettextcontenttype-props"
+                - blockquote [ref=e169]:
+                  - paragraph [ref=e170]: Some target platforms support setting an instance's text content without manually creating a text node.
+                - paragraph [ref=e171]:
+                  - text: "Taro: taro 模拟的 text 支持直接赋值 textContent ("
+                  - code [ref=e172]: packages/taro-runtime/src/dom/text.ts
+                  - text: )，该方法返回 false 即可.
+                - blockquote [ref=e173]:
+                  - paragraph [ref=e174]: 因返回false，因此 resetTextContent 不会被调用
+                - generic [ref=e175]:
+                  - heading "createTextInstance(text, rootContainer, hostContext, internalHandle)" [level=3] [ref=e176]
+                  - 'link "Permalink: createTextInstance(text, rootContainer, hostContext, internalHandle)" [ref=e177] [cursor=pointer]':
+                    - /url: "#createtextinstancetext-rootcontainer-hostcontext-internalhandle"
+                - blockquote [ref=e178]:
+                  - paragraph [ref=e179]: Same as createInstance, but for text nodes. If your renderer doesn't support text nodes, you can throw here.
+                - paragraph [ref=e180]:
+                  - text: "Taro: 模拟的 document 支持创建 text 节点， 返回"
+                  - code [ref=e181]: document.createTextNode(text)
+                  - text: 即可.
+                - generic [ref=e182]:
+                  - heading "scheduleTimeout(fn, delay)" [level=3] [ref=e183]
+                  - 'link "Permalink: scheduleTimeout(fn, delay)" [ref=e184] [cursor=pointer]':
+                    - /url: "#scheduletimeoutfn-delay"
+                - blockquote [ref=e185]:
+                  - paragraph [ref=e186]: You can proxy this to setTimeout or its equivalent in your environment.
+                - paragraph [ref=e187]: "Taro: setTimeout"
+                - generic [ref=e188]:
+                  - heading "cancelTimeout(id)" [level=3] [ref=e189]
+                  - 'link "Permalink: cancelTimeout(id)" [ref=e190] [cursor=pointer]':
+                    - /url: "#canceltimeoutid"
+                - blockquote [ref=e191]:
+                  - paragraph [ref=e192]: You can proxy this to clearTimeout or its equivalent in your environment.
+                - paragraph [ref=e193]: "Taro: clearTimeout"
+                - generic [ref=e194]:
+                  - heading "noTimeout" [level=3] [ref=e195]
+                  - 'link "Permalink: noTimeout" [ref=e196] [cursor=pointer]':
+                    - /url: "#notimeout"
+                - blockquote [ref=e197]:
+                  - paragraph [ref=e198]: This is a property (not a function) that should be set to something that can never be a valid timeout ID. For example, you can set it to -1.
+                - paragraph [ref=e199]: "Taro: -1"
+                - generic [ref=e200]:
+                  - heading "isPrimaryRenderer" [level=3] [ref=e201]
+                  - 'link "Permalink: isPrimaryRenderer" [ref=e202] [cursor=pointer]':
+                    - /url: "#isprimaryrenderer"
+                - blockquote [ref=e203]:
+                  - paragraph [ref=e204]: This is a property (not a function) that should be set to true if your renderer is the main one on the page.
+                - paragraph [ref=e205]: "Taro: true"
+                - generic [ref=e206]:
+                  - heading "warnsIfNotActing" [level=3] [ref=e207]
+                  - 'link "Permalink: warnsIfNotActing" [ref=e208] [cursor=pointer]':
+                    - /url: "#warnsifnotacting"
+                - blockquote [ref=e209]:
+                  - paragraph [ref=e210]: Only used in development mode.
+                - paragraph [ref=e211]: "Taro: true"
+                - generic [ref=e212]:
+                  - heading "supportsMutation" [level=3] [ref=e213]
+                  - 'link "Permalink: supportsMutation" [ref=e214] [cursor=pointer]':
+                    - /url: "#supportsmutation"
+                - blockquote [ref=e215]:
+                  - paragraph [ref=e216]: If your target platform is similar to the DOM and has methods similar to appendChild, removeChild, and so on, you'll want to use the mutation mode.
+                - paragraph [ref=e217]: "Taro: true"
+                - generic [ref=e218]:
+                  - heading "supportsPersistence" [level=3] [ref=e219]
+                  - 'link "Permalink: supportsPersistence" [ref=e220] [cursor=pointer]':
+                    - /url: "#supportspersistence"
+                - blockquote [ref=e221]:
+                  - paragraph [ref=e222]: If your target platform has immutable trees, you'll want the persistent mode instead.
+                - paragraph [ref=e223]: "Taro: false"
+                - generic [ref=e224]:
+                  - heading "supportsHydration" [level=3] [ref=e225]
+                  - 'link "Permalink: supportsHydration" [ref=e226] [cursor=pointer]':
+                    - /url: "#supportshydration"
+                - blockquote [ref=e227]:
+                  - paragraph [ref=e228]: is support hydration
+                - paragraph [ref=e229]: "Taro: false"
+                - generic [ref=e230]:
+                  - heading "getInstanceFromNode(hostRoot)" [level=3] [ref=e231]
+                  - 'link "Permalink: getInstanceFromNode(hostRoot)" [ref=e232] [cursor=pointer]':
+                    - /url: "#getinstancefromnodehostroot"
+                - blockquote [ref=e233]:
+                  - paragraph [ref=e234]: 自定义获取 instance 的逻辑
+                - paragraph [ref=e235]:
+                  - text: "Taro: 返回 null，React 内部会继续调用"
+                  - code [ref=e236]: findFiberRoot
+                  - text: 方法获取.
+                - generic [ref=e237]:
+                  - heading "beforeActiveInstanceBlur" [level=3] [ref=e238]
+                  - 'link "Permalink: beforeActiveInstanceBlur" [ref=e239] [cursor=pointer]':
+                    - /url: "#beforeactiveinstanceblur"
+                - blockquote [ref=e240]:
+                  - paragraph [ref=e241]: flag enableCreateEventHandleAPI is false, never call it
+                - paragraph [ref=e242]: "Taro: 置空"
+                - generic [ref=e243]:
+                  - heading "afterActiveInstanceBlur" [level=3] [ref=e244]
+                  - 'link "Permalink: afterActiveInstanceBlur" [ref=e245] [cursor=pointer]':
+                    - /url: "#afteractiveinstanceblur"
+                - blockquote [ref=e246]:
+                  - paragraph [ref=e247]: flag enableCreateEventHandleAPI is false, never call it
+                - paragraph [ref=e248]: "Taro: 置空"
+                - generic [ref=e249]:
+                  - heading "preparePortalMount(containerInfo)" [level=3] [ref=e250]
+                  - 'link "Permalink: preparePortalMount(containerInfo)" [ref=e251] [cursor=pointer]':
+                    - /url: "#prepareportalmountcontainerinfo"
+                - blockquote [ref=e252]:
+                  - paragraph [ref=e253]: This method is called for a container that's used as a portal target. Usually you can leave it empty.
+                - paragraph [ref=e254]: "Taro: 暂不支持 portal，置空即可"
+                - generic [ref=e255]:
+                  - heading "prepareScopeUpdate" [level=3] [ref=e256]
+                  - 'link "Permalink: prepareScopeUpdate" [ref=e257] [cursor=pointer]':
+                    - /url: "#preparescopeupdate"
+                - blockquote [ref=e258]:
+                  - paragraph [ref=e259]: flag enableScopeAPI is false, never call it
+                - paragraph [ref=e260]: "Taro: 置空"
+                - generic [ref=e261]:
+                  - heading "getInstanceFromScope" [level=3] [ref=e262]
+                  - 'link "Permalink: getInstanceFromScope" [ref=e263] [cursor=pointer]':
+                    - /url: "#getinstancefromscope"
+                - blockquote [ref=e264]:
+                  - paragraph [ref=e265]: flag enableScopeAPI is false, never call it
+                - paragraph [ref=e266]: "Taro: 返回 null 即可"
+                - generic [ref=e267]:
+                  - heading "getCurrentEventPriority" [level=3] [ref=e268]
+                  - 'link "Permalink: getCurrentEventPriority" [ref=e269] [cursor=pointer]':
+                    - /url: "#getcurrenteventpriority"
+                - blockquote [ref=e270]:
+                  - paragraph [ref=e271]: The constant you return depends on which event, if any, is being handled right now.
+                - paragraph [ref=e272]:
+                  - text: "Taro: 默认为点击事件，返回"
+                  - code [ref=e273]: DefaultEventPriority
+                  - text: 即可
+                - generic [ref=e274]:
+                  - heading "detachDeletedInstance" [level=3] [ref=e275]
+                  - 'link "Permalink: detachDeletedInstance" [ref=e276] [cursor=pointer]':
+                    - /url: "#detachdeletedinstance"
+                - blockquote [ref=e277]:
+                  - paragraph [ref=e278]:
+                    - text: 当 fiber 被标记为 Deletion 时，dom被卸载后，从dom节点上删除 react 初始化的内容，如 __reactProps$xxxx 等. 详见
+                    - link "React源码" [ref=e279] [cursor=pointer]:
+                      - /url: https://github.com/facebook/react/blob/973b90bdf6f4a1d9b3864d93985d4a204f233855/packages/react-dom-bindings/src/client/ReactDOMComponentTree.js#L54
+                - paragraph [ref=e280]:
+                  - text: "Taro: 因taro无法获取到 $xxxx 随机数，因此暂无法实现善后工作，该方法置空. 但可以根据字段是否"
+                  - code [ref=e281]: __react
+                  - text: 开头来实现。
+                - generic [ref=e282]:
+                  - heading "supportsMicrotasks" [level=3] [ref=e283]
+                  - 'link "Permalink: supportsMicrotasks" [ref=e284] [cursor=pointer]':
+                    - /url: "#supportsmicrotasks"
+                - blockquote [ref=e285]:
+                  - paragraph [ref=e286]: 是否支持微任务
+                - paragraph [ref=e287]: "Taro: true"
+                - generic [ref=e288]:
+                  - heading "scheduleMicrotask" [level=3] [ref=e289]
+                  - 'link "Permalink: scheduleMicrotask" [ref=e290] [cursor=pointer]':
+                    - /url: "#schedulemicrotask"
+                - blockquote [ref=e291]:
+                  - paragraph [ref=e292]: 微任务方法 polyfill
+                - paragraph [ref=e293]: "Taro: 使用 promise.then 模拟实现，或直接使用 setTimeout"
+                - paragraph [ref=e294]:
+                  - strong [ref=e295]:
+                    - text: 以下字段因
+                    - code [ref=e296]: supportsMutation=true
+                    - text: 而需要被实现
+                - generic [ref=e297]:
+                  - heading "appendChild(parentInstance, child)" [level=3] [ref=e298]
+                  - 'link "Permalink: appendChild(parentInstance, child)" [ref=e299] [cursor=pointer]':
+                    - /url: "#appendchildparentinstance-child"
+                - blockquote [ref=e300]:
+                  - paragraph [ref=e301]: This method should mutate the parentInstance and add the child to its list of children.
+                - paragraph [ref=e302]:
+                  - text: "Taro: 调用"
+                  - code [ref=e303]: parentInstance.appendChild(child)
+                  - text: 即可
+                - generic [ref=e304]:
+                  - heading "appendChildToContainer(container, child)" [level=3] [ref=e305]
+                  - 'link "Permalink: appendChildToContainer(container, child)" [ref=e306] [cursor=pointer]':
+                    - /url: "#appendchildtocontainercontainer-child"
+                - blockquote [ref=e307]:
+                  - paragraph [ref=e308]: Same as appendChild, but for when a node is attached to the root container.
+                - paragraph [ref=e309]:
+                  - text: "Taro: 调用"
+                  - code [ref=e310]: parentInstance.appendChild(child)
+                  - text: 即可
+                - generic [ref=e311]:
+                  - heading "commitTextUpdate(textInstance, prevText, nextText)" [level=3] [ref=e312]
+                  - 'link "Permalink: commitTextUpdate(textInstance, prevText, nextText)" [ref=e313] [cursor=pointer]':
+                    - /url: "#committextupdatetextinstance-prevtext-nexttext"
+                - blockquote [ref=e314]:
+                  - paragraph [ref=e315]: This method should mutate the textInstance and update its text content to nextText.
+                - paragraph [ref=e316]:
+                  - text: "Taro: 赋值"
+                  - code [ref=e317]: textInstance.nodeValue
+                  - text: 即可
+                - generic [ref=e318]:
+                  - heading "commitMount(instance, type, props, internalHandle)" [level=3] [ref=e319]
+                  - 'link "Permalink: commitMount(instance, type, props, internalHandle)" [ref=e320] [cursor=pointer]':
+                    - /url: "#commitmountinstance-type-props-internalhandle"
+                - blockquote [ref=e321]:
+                  - paragraph [ref=e322]: This method is only called if you returned true from finalizeInitialChildren for this instance.
+                - paragraph [ref=e323]:
+                  - text: "Taro: 因"
+                  - code [ref=e324]: finalizeInitialChildren
+                  - text: 返回 false，该方法置空
+                - generic [ref=e325]:
+                  - heading "commitUpdate(instance, updatePayload, type, prevProps, nextProps, internalHandle)" [level=3] [ref=e326]
+                  - 'link "Permalink: commitUpdate(instance, updatePayload, type, prevProps, nextProps, internalHandle)" [ref=e327] [cursor=pointer]':
+                    - /url: "#commitupdateinstance-updatepayload-type-prevprops-nextprops-internalhandle"
+                - blockquote [ref=e328]:
+                  - paragraph [ref=e329]: This method should mutate the instance according to the set of changes in updatePayload.
+                - paragraph [ref=e330]:
+                  - text: "Taro: 根据 updatePayload，将属性更新到 instance 中，此时 updatePayload 是一个类似"
+                  - code [ref=e331]: "[prop1, value1, prop2, value2, ...]"
+                  - text: 的数组
+                - blockquote [ref=e332]:
+                  - paragraph [ref=e333]: 如果 updatePayload 为 null，该方法在 React 内部不会被调用
+                - generic [ref=e334]:
+                  - heading "insertBefore(parentInstance, child, beforeChild)" [level=3] [ref=e335]
+                  - 'link "Permalink: insertBefore(parentInstance, child, beforeChild)" [ref=e336] [cursor=pointer]':
+                    - /url: "#insertbeforeparentinstance-child-beforechild"
+                - blockquote [ref=e337]:
+                  - paragraph [ref=e338]: This method should mutate the parentInstance and place the child before beforeChild in the list of its children.
+                - paragraph [ref=e339]:
+                  - text: "Taro: 调用"
+                  - code [ref=e340]: parentInstance.insertBefore(child)
+                  - text: 即可
+                - generic [ref=e341]:
+                  - heading "insertInContainerBefore(container, child, beforeChild)" [level=3] [ref=e342]
+                  - 'link "Permalink: insertInContainerBefore(container, child, beforeChild)" [ref=e343] [cursor=pointer]':
+                    - /url: "#insertincontainerbeforecontainer-child-beforechild"
+                - blockquote [ref=e344]:
+                  - paragraph [ref=e345]: Same as insertBefore, but for when a node is attached to the root container.
+                - paragraph [ref=e346]:
+                  - text: "Taro: 调用"
+                  - code [ref=e347]: container.insertBefore(child)
+                  - text: 即可
+                - generic [ref=e348]:
+                  - heading "removeChild(parentInstance, child)" [level=3] [ref=e349]
+                  - 'link "Permalink: removeChild(parentInstance, child)" [ref=e350] [cursor=pointer]':
+                    - /url: "#removechildparentinstance-child"
+                - blockquote [ref=e351]:
+                  - paragraph [ref=e352]: This method should mutate the parentInstance to remove the child from the list of its children.
+                - paragraph [ref=e353]:
+                  - text: "Taro: 调用"
+                  - code [ref=e354]: parentInstance.removeChild(child)
+                  - text: 即可
+                - generic [ref=e355]:
+                  - heading "removeChildFromContainer(container, child)" [level=3] [ref=e356]
+                  - 'link "Permalink: removeChildFromContainer(container, child)" [ref=e357] [cursor=pointer]':
+                    - /url: "#removechildfromcontainercontainer-child"
+                - blockquote [ref=e358]:
+                  - paragraph [ref=e359]: Same as removeChild, but for when a node is detached from the root container.
+                - paragraph [ref=e360]:
+                  - text: "Taro: 调用"
+                  - code [ref=e361]: container.removeChild(child)
+                  - text: 即可
+                - generic [ref=e362]:
+                  - heading "resetTextContent(instance)" [level=3] [ref=e363]
+                  - 'link "Permalink: resetTextContent(instance)" [ref=e364] [cursor=pointer]':
+                    - /url: "#resettextcontentinstance"
+                - blockquote [ref=e365]:
+                  - paragraph [ref=e366]: If you never return true from shouldSetTextContent, you can leave it empty.
+                - paragraph [ref=e367]: "Taro: 该方法置空"
+                - generic [ref=e368]:
+                  - heading "hideInstance(instance)" [level=3] [ref=e369]
+                  - 'link "Permalink: hideInstance(instance)" [ref=e370] [cursor=pointer]':
+                    - /url: "#hideinstanceinstance"
+                - blockquote [ref=e371]:
+                  - paragraph [ref=e372]: This method should make the instance invisible without removing it from the tree.
+                - paragraph [ref=e373]:
+                  - text: "Taro:"
+                  - code [ref=e374]: display
+                  - text: 样式置为
+                  - code [ref=e375]: none
+                  - text: 即可
+                - generic [ref=e376]:
+                  - heading "hideTextInstance(textInstance)" [level=3] [ref=e377]
+                  - 'link "Permalink: hideTextInstance(textInstance)" [ref=e378] [cursor=pointer]':
+                    - /url: "#hidetextinstancetextinstance"
+                - blockquote [ref=e379]:
+                  - paragraph [ref=e380]: Same as hideInstance, but for nodes created by createTextInstance.
+                - paragraph [ref=e381]:
+                  - text: "Taro:"
+                  - code [ref=e382]: textInstance.nodeValue = ''
+                  - text: 即可
+                - generic [ref=e383]:
+                  - heading "unhideInstance(instance, props)" [level=3] [ref=e384]
+                  - 'link "Permalink: unhideInstance(instance, props)" [ref=e385] [cursor=pointer]':
+                    - /url: "#unhideinstanceinstance-props"
+                - blockquote [ref=e386]:
+                  - paragraph [ref=e387]: This method should make the instance visible, undoing what hideInstance did.
+                - paragraph [ref=e388]:
+                  - text: "Taro:"
+                  - code [ref=e389]: display
+                  - text: 样式重置即可
+                - generic [ref=e390]:
+                  - heading "unhideTextInstance(textInstance, text)" [level=3] [ref=e391]
+                  - 'link "Permalink: unhideTextInstance(textInstance, text)" [ref=e392] [cursor=pointer]':
+                    - /url: "#unhidetextinstancetextinstance-text"
+                - blockquote [ref=e393]:
+                  - paragraph [ref=e394]: Same as unhideInstance, but for nodes created by createTextInstance.
+                - paragraph [ref=e395]:
+                  - text: "Taro:"
+                  - code [ref=e396]: textInstance.nodeValue = text
+                  - text: 即可
+                - generic [ref=e397]:
+                  - heading "clearContainer(container)" [level=3] [ref=e398]
+                  - 'link "Permalink: clearContainer(container)" [ref=e399] [cursor=pointer]':
+                    - /url: "#clearcontainercontainer"
+                - blockquote [ref=e400]:
+                  - paragraph [ref=e401]: This method should mutate the container root node and remove all children from it.
+                - paragraph [ref=e402]:
+                  - text: "Taro: 将"
+                  - code [ref=e403]: container
+                  - text: 所有孩子节点
+                  - code [ref=e404]: nodeValue
+                  - text: 置空即可
+            - generic [ref=e405]:
+              - heading "Readme" [level=2] [ref=e406]
+              - heading "Keywords" [level=3] [ref=e407]
+              - text: none
+          - tabpanel
+          - tabpanel
+          - tabpanel "3 Dependencies"
+          - tabpanel "145 Dependents"
+          - tabpanel "848 Versions"
+        - complementary "Package sidebar" [ref=e408]:
+          - heading "Package Sidebar" [level=2] [ref=e409]
+          - heading "Install" [level=3] [ref=e410]
+          - generic [ref=e411]:
+            - img
+            - paragraph [ref=e412]:
+              - generic [ref=e413]:
+                - code [ref=e414]: npm i @tarojs/react
+                - button "Copy install command line" [ref=e415] [cursor=pointer]:
+                  - img
+          - generic [ref=e416]:
+            - heading "Repository" [level=3] [ref=e417]
+            - paragraph [ref=e418]:
+              - link "Repository github.com/NervJS/taro" [ref=e419] [cursor=pointer]:
+                - /url: https://github.com/NervJS/taro
+                - img [ref=e421]
+                - text: github.com/NervJS/taro
+          - generic [ref=e424]:
+            - heading "Homepage" [level=3] [ref=e425]
+            - paragraph [ref=e426]:
+              - link "Homepage github.com/NervJS/taro#readme" [ref=e427] [cursor=pointer]:
+                - /url: https://github.com/NervJS/taro#readme
+                - img [ref=e428]
+                - text: github.com/NervJS/taro#readme
+          - button "Showing weekly downloads" [ref=e430]:
+            - heading "Weekly Downloads" [level=3] [ref=e431]:
+              - img [ref=e432]
+              - text: Weekly Downloads
+            - generic [ref=e436]:
+              - img [ref=e437]
+              - paragraph [ref=e442]: 9,467
+          - generic [ref=e443]:
+            - heading "Version" [level=3] [ref=e444]
+            - paragraph [ref=e446]: 4.2.0
+          - generic [ref=e447]:
+            - heading "License" [level=3] [ref=e448]
+            - paragraph [ref=e449]: MIT
+          - generic [ref=e450]:
+            - heading "Last publish" [level=3] [ref=e451]
+            - paragraph [ref=e452]:
+              - time [ref=e453]: a day ago
+          - generic [ref=e454]:
+            - heading "Collaborators" [level=3] [ref=e455]
+            - list "Collaborators" [ref=e456]:
+              - listitem [ref=e457]:
+                - link "yuche" [ref=e459] [cursor=pointer]:
+                  - /url: /~yuche
+                  - img "yuche" [ref=e460]
+              - listitem [ref=e461]:
+                - link "xuanzebin" [ref=e463] [cursor=pointer]:
+                  - /url: /~xuanzebin
+                  - img "xuanzebin" [ref=e464]
+              - listitem [ref=e465]:
+                - link "defaultlee" [ref=e467] [cursor=pointer]:
+                  - /url: /~defaultlee
+                  - img "defaultlee" [ref=e468]
+              - listitem [ref=e469]:
+                - link "drchan" [ref=e471] [cursor=pointer]:
+                  - /url: /~drchan
+                  - img "drchan" [ref=e472]
+              - listitem [ref=e473]:
+                - link "kyjo" [ref=e475] [cursor=pointer]:
+                  - /url: /~kyjo
+                  - img "kyjo" [ref=e476]
+              - listitem [ref=e477]:
+                - link "qq592743779" [ref=e479] [cursor=pointer]:
+                  - /url: /~qq592743779
+                  - img "qq592743779" [ref=e480]
+              - listitem [ref=e481]:
+                - link "advancedcat" [ref=e483] [cursor=pointer]:
+                  - /url: /~advancedcat
+                  - img "advancedcat" [ref=e484]
+              - listitem [ref=e485]:
+                - link "baosiqing" [ref=e487] [cursor=pointer]:
+                  - /url: /~baosiqing
+                  - img "baosiqing" [ref=e488]
+              - listitem [ref=e489]:
+                - link "zakary" [ref=e491] [cursor=pointer]:
+                  - /url: /~zakary
+                  - img "zakary" [ref=e492]
+              - listitem [ref=e493]:
+                - link "liuzejia" [ref=e495] [cursor=pointer]:
+                  - /url: /~liuzejia
+                  - img "liuzejia" [ref=e496]
+              - listitem [ref=e497]:
+                - link "vasily.cjj" [ref=e499] [cursor=pointer]:
+                  - /url: /~vasily.cjj
+                  - img "vasily.cjj" [ref=e500]
+              - listitem [ref=e501]:
+                - link "hardenzheng2" [ref=e503] [cursor=pointer]:
+                  - /url: /~hardenzheng2
+                  - img "hardenzheng2" [ref=e504]
+          - generic [ref=e505]:
+            - link "Analyze security with Socket" [ref=e506] [cursor=pointer]:
+              - /url: https://socket.dev/npm/package/%40tarojs%2Freact
+              - img [ref=e507]
+              - strong [ref=e509]: Analyze security
+              - text: with Socket
+            - link "Check bundle size" [ref=e510] [cursor=pointer]:
+              - /url: https://bundlephobia.com/package/%40tarojs%2Freact
+              - img [ref=e511]
+              - strong [ref=e513]: Check bundle size
+            - link "View package health" [ref=e514] [cursor=pointer]:
+              - /url: https://snyk.io/advisor/npm-package/%40tarojs%2Freact
+              - img [ref=e515]
+              - strong [ref=e517]: View package health
+            - link "Explore dependencies" [ref=e518] [cursor=pointer]:
+              - /url: https://npmgraph.js.org/?q=%40tarojs%2Freact
+              - img [ref=e519]
+              - strong [ref=e521]: Explore dependencies
+          - link "Report malware" [ref=e523] [cursor=pointer]:
+            - /url: /support?inquire=security&security-inquire=malware&package=%40tarojs%2Freact&version=4.2.0
+            - img [ref=e524]
+            - strong [ref=e526]: Report
+            - text: malware
+    - contentinfo [ref=e527]:
+      - heading "Footer" [level=2] [ref=e528]
+      - generic [ref=e529]:
+        - generic [ref=e530]:
+          - link "Visit npm GitHub page" [ref=e532] [cursor=pointer]:
+            - /url: https://github.com/npm
+            - img [ref=e533]
+          - link "GitHub" [ref=e537] [cursor=pointer]:
+            - /url: https://github.com
+            - img [ref=e538]
+        - generic [ref=e540]:
+          - heading "Support" [level=3] [ref=e541]
+          - list "Support" [ref=e542]:
+            - listitem [ref=e543]:
+              - link "Help" [ref=e544] [cursor=pointer]:
+                - /url: https://docs.npmjs.com
+            - listitem [ref=e545]:
+              - link "Advisories" [ref=e546] [cursor=pointer]:
+                - /url: https://github.com/advisories
+            - listitem [ref=e547]:
+              - link "Status" [ref=e548] [cursor=pointer]:
+                - /url: http://status.npmjs.org/
+            - listitem [ref=e549]:
+              - link "Contact npm" [ref=e550] [cursor=pointer]:
+                - /url: /support
+        - generic [ref=e551]:
+          - heading "Company" [level=3] [ref=e552]
+          - list "Company" [ref=e553]:
+            - listitem [ref=e554]:
+              - link "About" [ref=e555] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e556]:
+              - link "Blog" [ref=e557] [cursor=pointer]:
+                - /url: https://github.blog/tag/npm/
+            - listitem [ref=e558]:
+              - link "Press" [ref=e559] [cursor=pointer]:
+                - /url: /press
+        - generic [ref=e560]:
+          - heading "Terms & Policies" [level=3] [ref=e561]
+          - list "Terms & Policies" [ref=e562]:
+            - listitem [ref=e563]:
+              - link "Policies" [ref=e564] [cursor=pointer]:
+                - /url: /policies/
+            - listitem [ref=e565]:
+              - link "Terms of Use" [ref=e566] [cursor=pointer]:
+                - /url: /policies/terms
+            - listitem [ref=e567]:
+              - link "Code of Conduct" [ref=e568] [cursor=pointer]:
+                - /url: /policies/conduct
+            - listitem [ref=e569]:
+              - link "Privacy" [ref=e570] [cursor=pointer]:
+                - /url: /policies/privacy
+  - generic [ref=e572]: Viewing @tarojs/react version 4.2.0

@@ -11,6 +11,12 @@ export function hexToRgb(hex) {
     return m ? { r: parseInt(m[1], 16), g: parseInt(m[2], 16), b: parseInt(m[3], 16) } : null;
 }
 
+/** { r, g, b } → "#RRGGBB" */
+export function rgbToHex(rgb) {
+    const toHex = (n) => Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, '0');
+    return '#' + toHex(rgb.r) + toHex(rgb.g) + toHex(rgb.b);
+}
+
 function srgbChannelToLinear(channel) {
     const n = channel / 255;
     return n <= 0.04045 ? n / 12.92 : Math.pow((n + 0.055) / 1.055, 2.4);

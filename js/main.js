@@ -882,6 +882,7 @@ function ensureToolsLoaded() {
     if (grid) grid.innerHTML = '<div class="tool-loading"><div class="tool-loading-spinner"></div><span>加载工具列表…</span></div>';
 
     const script = document.createElement('script');
+    script.type = 'module';
     script.src = 'js/tools/registry.js';
     script.onload = () => {
         toolsLoaded = true;
