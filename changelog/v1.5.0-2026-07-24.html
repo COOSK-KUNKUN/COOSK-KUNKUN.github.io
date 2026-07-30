@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v1.5.0 - 全站动森风格重设计与灵感仓库 - COOSK琨琨</title>
+    <meta name="description" content="全站 UI 重设计为动物森友会风格，新增灵感仓库模块">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="blog-page">
+    <header class="blog-header">
+        <div class="header-content">
+            <a href="../index.html" class="header-logo">
+                <div class="header-logo-icon">C</div>
+                <span class="header-logo-text">COOSK琨琨</span>
+            </a>
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                    <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                    </svg>
+                    <svg class="moon-icon hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="note-content">
+        <article class="note-article">
+            <header class="note-header">
+                <h1 class="note-title">v1.5.0 - 全站动森风格重设计与灵感仓库</h1>
+                <div class="note-meta">
+                    <time class="note-date">2026年7月24日</time>
+                </div>
+            </header>
+
+            <div class="note-body changelog-body">
+                <h2>新增功能</h2>
+                <ul>
+                    <li><strong>灵感仓库</strong> — 新增「灵感仓库」导航模块，支持文章列表浏览与详情钻入</li>
+                    <li>文章数据通过 <code>articles/index.json</code> 动态加载，支持搜索过滤</li>
+                </ul>
+
+                <h2>全站 UI 重设计</h2>
+                <ul>
+                    <li>整体风格从苹果风切换为<strong>动物森友会（Animal Island）</strong>风格</li>
+                    <li>引入 Nunito + Noto Sans SC 圆体字体组合</li>
+                    <li>配色方案：奶油米白背景 + 温暖大地棕文字 + 薄荷青绿主色</li>
+                    <li>深色主题调整为暖夜森林色调，告别冷灰黑</li>
+                </ul>
+
+                <h2>视觉细节优化</h2>
+                <ul>
+                    <li>工具卡片新增飘带标题（swallowtail ribbon），5 色轮换增加活泼感</li>
+                    <li>侧边栏改为游戏机菜单风格，选中态为实心青绿胶囊</li>
+                    <li>卡片采用奶油底 + 圆角 + 边框分层，hover 上浮替代阴影</li>
+                    <li>返回按钮改为 pill 形描边，返回顶部按钮增加 3D 立体按键感</li>
+                    <li>搜索框焦点使用薄荷青绿细环，全局焦点环改为黄色</li>
+                    <li>首页背景渐变为暖橙色调</li>
+                </ul>
+
+                <h2>参考项目</h2>
+                <ul>
+                    <li>新增 <code>animal-island-ui</code> 参考项目，包含完整组件库与设计 token</li>
+                </ul>
+            </div>
+
+            <footer class="note-footer">
+                <a href="../blog.html" class="back-link">&larr; 返回更新记录</a>
+            </footer>
+        </article>
+    </main>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

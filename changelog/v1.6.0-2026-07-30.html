@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v1.6.0 - 拼豆工作台全面升级 - COOSK琨琨</title>
+    <meta name="description" content="拼豆工具新增手工编辑器、专业导出器与像素编辑器">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="blog-page">
+    <header class="blog-header">
+        <div class="header-content">
+            <a href="../index.html" class="header-logo">
+                <div class="header-logo-icon">C</div>
+                <span class="header-logo-text">COOSK琨琨</span>
+            </a>
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                    <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                    </svg>
+                    <svg class="moon-icon hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="note-content">
+        <article class="note-article">
+            <header class="note-header">
+                <h1 class="note-title">v1.6.0 - 拼豆工作台全面升级</h1>
+                <div class="note-meta">
+                    <time class="note-date">2026年7月30日</time>
+                </div>
+            </header>
+
+            <div class="note-body changelog-body">
+                <h2>新增功能</h2>
+                <ul>
+                    <li><strong>手工编辑器</strong> — 完整画布编辑能力：画笔、橡皮、吸管、洪水填充，支持拖动连续绘制</li>
+                    <li><strong>专业导出器</strong> — 导出含坐标标尺、标题栏、底部色号清单的可打印图纸 PNG，以及清单 CSV</li>
+                    <li><strong>像素编辑器</strong> — 单格上色、擦除、取色、连通区域填充，支持撤销/重做（最多 50 步）</li>
+                    <li><strong>CSV 导入导出</strong> — 支持将图纸导出为 CSV 文件，也可从 CSV 导入还原图纸</li>
+                    <li><strong>镜像绘制</strong> — 开启后左右对称绘制，适合对称图案设计</li>
+                    <li><strong>快捷键支持</strong> — B/E/G/I/H 切换工具，Ctrl+Z/Y 撤销重做，空格平移，N/M 切换网格/镜像</li>
+                </ul>
+
+                <h2>渲染升级</h2>
+                <ul>
+                    <li>新增<strong>有质感豆子</strong>渲染模式：立体圆环豆子，含斜向渐变、高光、中心孔洞与外缘描边</li>
+                    <li>新增<strong>无质感</strong>扁平模式：纯色圆点，扁平清晰方便数格</li>
+                    <li>新增<strong>底板层</strong>：空白格显示钉板小凸点纹理</li>
+                    <li>网格线优化：细线随缩放渐隐，每 10 格加重线，外框加粗</li>
+                    <li>色号文字增加反色描边，确保在深色豆子上也可读</li>
+                    <li>单格增量重绘：拖动绘制时只重绘当前格，保证流畅</li>
+                </ul>
+
+                <h2>交互优化</h2>
+                <ul>
+                    <li>视口缩放约束：图纸小于视口时居中锁定，大于视口时边缘不能拖入</li>
+                    <li>抓手工具 + 空格键平移画布</li>
+                    <li>鼠标悬停 Tooltip 显示色号与 HEX 值</li>
+                    <li>色板新增大类标签筛选，点击分类快速过滤颜色</li>
+                    <li>最近使用颜色记录</li>
+                    <li>工具注册表改用 <code>import.meta.url</code> 解析路径，确保子页面也能正确加载工具模块</li>
+                </ul>
+
+                <h2>参考项目</h2>
+                <ul>
+                    <li>新增 <code>拼豆参考</code> 目录，包含 <code>perler-beads-master</code> 与 <code>perler-beads-ai-main</code> 两个参考项目源码</li>
+                </ul>
+            </div>
+
+            <footer class="note-footer">
+                <a href="../blog.html" class="back-link">&larr; 返回更新记录</a>
+            </footer>
+        </article>
+    </main>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>
